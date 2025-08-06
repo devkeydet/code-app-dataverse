@@ -29,6 +29,11 @@
           "entitySetName": "accounts",
           "logicalName": "account",
           "isHidden": false
+        },
+        "contacts": {
+          "entitySetName": "contacts",
+          "logicalName": "contact",
+          "isHidden": false
         }
       },
       "version": "v9.0",
