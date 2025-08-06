@@ -7,6 +7,17 @@
   "buildEntryPoint": "index.html",
   "logoPath": ".\\src\\assets\\react.svg",
   "localAppUrl": "http://localhost:3000/",
-  "connectionReferences": {},
+  "connectionReferences": {
+    "ca8d5b93-3d31-4ed0-a0d8-64b2e9cb85a7": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+      "displayName": "Office 365 Users",
+      "dataSources": [
+        "office365users"
+      ],
+      "authenticationType": null,
+      "sharedConnectionId": null,
+      "dataSets": {}
+    }
+  },
   "databaseReferences": {}
 }
