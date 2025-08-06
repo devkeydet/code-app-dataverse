@@ -5,6 +5,13 @@
  */
 
 export const dataSourcesInfo = {
+  "accounts": {
+    "tableId": "",
+    "version": "",
+    "primaryKey": "accountid",
+    "dataSourceType": "Dataverse",
+    "apis": {}
+  },
   "office365users": {
     "tableId": "",
     "version": "",
@@ -19,21 +26,18 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "body",
             "in": "body",
             "required": false,
-            "type": "object",
-            "default": null
+            "type": "object"
           }
         ],
         "responseInfo": {
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -45,21 +49,18 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$select",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           }
         }
       },
@@ -71,28 +72,24 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "body",
             "in": "body",
             "required": true,
-            "type": "object",
-            "default": null
+            "type": "object"
           },
           {
             "name": "Content-Type",
             "in": "header",
             "required": true,
-            "type": "string",
-            "default": "image/jpeg"
+            "type": "string"
           }
         ],
         "responseInfo": {
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -104,35 +101,30 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$filter",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "extractSensitivityLabel",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": "false"
+            "type": "string"
           },
           {
             "name": "fetchSensitivityLabelMetadata",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": "false"
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           }
         }
       },
@@ -144,25 +136,21 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -174,38 +162,30 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
-          "202": {
-            "type": "void",
-            "format": null
-          },
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
+          },
+          "202": {
+            "type": "void"
           },
           "400": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "401": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "403": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "500": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -217,45 +197,36 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
-          "202": {
-            "type": "void",
-            "format": null
-          },
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
+          },
+          "202": {
+            "type": "void"
           },
           "400": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "401": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "403": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "500": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -267,25 +238,21 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "userId",
             "in": "query",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -297,15 +264,13 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "userId",
             "in": "query",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
@@ -314,8 +279,7 @@ export const dataSourcesInfo = {
             "format": "binary"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -327,45 +291,36 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
-          "202": {
-            "type": "void",
-            "format": null
-          },
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
+          },
+          "202": {
+            "type": "void"
           },
           "400": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "401": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "403": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "500": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -377,45 +332,36 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
-          "202": {
-            "type": "void",
-            "format": null
-          },
           "200": {
-            "type": "array",
-            "format": null
+            "type": "array"
+          },
+          "202": {
+            "type": "void"
           },
           "400": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "401": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "403": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "500": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -427,52 +373,42 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "searchTerm",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "top",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "default": 0
+            "type": "integer"
           }
         ],
         "responseInfo": {
-          "202": {
-            "type": "void",
-            "format": null
-          },
           "200": {
-            "type": "array",
-            "format": null
+            "type": "array"
+          },
+          "202": {
+            "type": "void"
           },
           "400": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "401": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "403": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "500": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -484,66 +420,54 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "searchTerm",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "top",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "default": null
+            "type": "integer"
           },
           {
             "name": "isSearchTermRequired",
             "in": "query",
             "required": false,
-            "type": "boolean",
-            "default": true
+            "type": "boolean"
           },
           {
             "name": "skipToken",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
-          "202": {
-            "type": "void",
-            "format": null
-          },
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
+          },
+          "202": {
+            "type": "void"
           },
           "400": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "401": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "403": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "500": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -555,18 +479,15 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "void",
-            "format": null
+            "type": "void"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       },
@@ -578,28 +499,24 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$select",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           }
         }
       },
@@ -611,28 +528,24 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$select",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           }
         }
       },
@@ -644,35 +557,30 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$select",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$top",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "default": null
+            "type": "integer"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           }
         }
       },
@@ -684,15 +592,13 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
@@ -710,42 +616,36 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "$filter",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "extractSensitivityLabel",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": "false"
+            "type": "string"
           },
           {
             "name": "fetchSensitivityLabelMetadata",
             "in": "query",
             "required": false,
-            "type": "string",
-            "default": "false"
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           }
         }
       },
@@ -757,81 +657,69 @@ export const dataSourcesInfo = {
             "name": "connectionId",
             "in": "path",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "Uri",
             "in": "header",
             "required": true,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "Method",
             "in": "header",
             "required": true,
-            "type": "string",
-            "default": "GET"
+            "type": "string"
           },
           {
             "name": "Body",
             "in": "body",
             "required": false,
-            "type": "object",
-            "default": null
+            "type": "object"
           },
           {
             "name": "ContentType",
             "in": "header",
             "required": false,
-            "type": "string",
-            "default": "application/json"
+            "type": "string"
           },
           {
             "name": "CustomHeader1",
             "in": "header",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "CustomHeader2",
             "in": "header",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "CustomHeader3",
             "in": "header",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "CustomHeader4",
             "in": "header",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "CustomHeader5",
             "in": "header",
             "required": false,
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responseInfo": {
           "200": {
-            "type": "object",
-            "format": null
+            "type": "object"
           },
           "default": {
-            "type": "void",
-            "format": null
+            "type": "void"
           }
         }
       }
