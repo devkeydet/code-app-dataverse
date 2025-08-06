@@ -1,0 +1,12 @@
+{
+  "appId": "87f61269-8f95-4cca-8965-4cc66c1ed894",
+  "appDisplayName": "code-app-dataverse",
+  "description": null,
+  "environmentId": "c65e3148-8866-ec07-b22b-0ff9a71b8616",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "logoPath": ".\\src\\assets\\react.svg",
+  "localAppUrl": "http://localhost:3000/",
+  "connectionReferences": {},
+  "databaseReferences": {}
+}
