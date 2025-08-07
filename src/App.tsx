@@ -105,9 +105,22 @@ const useStyles = makeStyles({
 function App() {
   const styles = useStyles()
   const [count, setCount] = useState(0)
-  const [isDarkTheme, setIsDarkTheme] = useState(true)
+
+  // Initialize theme from localStorage or default to dark theme
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('isDarkTheme')
+    return savedTheme ? JSON.parse(savedTheme) : true
+  })
+
   const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState('Home')
+
+  // Function to toggle theme and persist to localStorage
+  const toggleTheme = () => {
+    const newTheme = !isDarkTheme
+    setIsDarkTheme(newTheme)
+    localStorage.setItem('isDarkTheme', JSON.stringify(newTheme))
+  }
 
   const { user, userPhoto, loading, error } = useUserProfile()
 
@@ -125,7 +138,7 @@ function App() {
         return <SettingsPage
           title={currentPage}
           isDarkTheme={isDarkTheme}
-          onThemeToggle={() => setIsDarkTheme(!isDarkTheme)}
+          onThemeToggle={toggleTheme}
         />
       default:
         return <div>Page not found</div>
@@ -162,7 +175,7 @@ function App() {
       <div className={styles.root}>
         <TitleBar
           isDarkTheme={isDarkTheme}
-          onThemeToggle={() => setIsDarkTheme(!isDarkTheme)}
+          onThemeToggle={toggleTheme}
           userProfileComponent={userProfileComponent}
           className={styles.titleBar}
         />
