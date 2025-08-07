@@ -1,5 +1,13 @@
 # Power Platform Code Apps Development Guide
 
+## 🚨 CRITICAL DEVELOPMENT RESTRICTIONS
+
+### **DO NOT RUN DEVELOPMENT COMMANDS**
+- **NEVER run `npm run dev`** - This command is prohibited
+- **NEVER run `pac code run`** - This command is prohibited
+- If debugging is needed, create debug pages and ask the user to paste console output
+- The user will handle running these commands manually when needed
+
 ## Architecture Overview
 
 This is a **Power Platform Code Apps** project using React + TypeScript + Vite that connects to Dataverse and Office 365 connectors. The architecture follows a strict code-generation pattern where data models and services are auto-generated from Power Platform schemas.
