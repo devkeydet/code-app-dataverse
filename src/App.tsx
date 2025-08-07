@@ -207,8 +207,9 @@ function App() {
       <div className={styles.root}>
         {/* Teams-style Title Bar */}
         <div className={styles.titleBar}>
-          <div style={{ flexShrink: 1, minWidth: 0 }}>
-            <Title2>Power Platform Code App</Title2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 1, minWidth: 0 }}>
+            <img src="/src/assets/react.svg" style={{ height: '32px', width: '32px' }} alt="React logo" />
+            <Title2>Power Platform Code App using Dataverse (Fluent / Teams inspired) </Title2>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, marginRight: '0' }}>
