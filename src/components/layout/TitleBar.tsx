@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Text } from '@fluentui/react-components'
 import { WeatherSunny24Regular, WeatherMoon24Regular } from '@fluentui/react-icons'
+import { COMMON_STYLES, STYLE_CONSTANTS } from '../../constants/styles'
 
 interface TitleBarProps {
     isDarkTheme: boolean
@@ -17,33 +18,22 @@ const TitleBar: React.FC<TitleBarProps> = ({
 }) => {
     return (
         <div className={className}>
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                flexShrink: 1,
-                minWidth: 0
-            }}>
+            <div style={COMMON_STYLES.centeredRow}>
                 <img
                     src="/src/assets/react.svg"
-                    style={{ height: '24px', width: '24px', marginLeft: '0px' }}
+                    style={COMMON_STYLES.icon}
                     alt="React logo"
                 />
                 <Text
                     size={500}
                     weight="semibold"
-                    style={{ marginLeft: '24px' }}
+                    style={{ marginLeft: STYLE_CONSTANTS.SPACING.LG }}
                 >
                     Power Platform Code App using Dataverse (Fluent UI React v9 & Teams inspired)
                 </Text>
             </div>
 
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                flexShrink: 0,
-                marginRight: '0'
-            }}>
+            <div style={COMMON_STYLES.rightAlignedRow}>
                 <Button
                     appearance="subtle"
                     icon={isDarkTheme ? <WeatherSunny24Regular /> : <WeatherMoon24Regular />}

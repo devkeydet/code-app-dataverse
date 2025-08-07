@@ -1,5 +1,6 @@
-import React from 'react'
-import { Card, CardHeader, Title2, Body1, Button, Text } from '@fluentui/react-components'
+import { CardHeader, Title2, Body1, Button, Text } from '@fluentui/react-components'
+import CommonCard from './CommonCard'
+import { STYLE_CONSTANTS } from '../../constants/styles'
 
 interface InteractiveCounterProps {
     count: number
@@ -9,7 +10,7 @@ interface InteractiveCounterProps {
 
 const InteractiveCounter: React.FC<InteractiveCounterProps> = ({ count, setCount, style }) => {
     return (
-        <Card style={{ width: '400px', maxWidth: '90%', ...style }}>
+        <CommonCard style={style}>
             <CardHeader
                 header={<Title2>Interactive Counter</Title2>}
                 description={
@@ -18,12 +19,12 @@ const InteractiveCounter: React.FC<InteractiveCounterProps> = ({ count, setCount
                     </Body1>
                 }
             />
-            <div style={{ padding: '16px', textAlign: 'center' }}>
+            <div style={{ padding: STYLE_CONSTANTS.SPACING.MD, textAlign: 'center' }}>
                 <Button
                     appearance="primary"
                     size="large"
                     onClick={() => setCount((count) => count + 1)}
-                    style={{ marginBottom: '16px' }}
+                    style={{ marginBottom: STYLE_CONSTANTS.SPACING.MD }}
                 >
                     Count is {count}
                 </Button>
@@ -32,7 +33,7 @@ const InteractiveCounter: React.FC<InteractiveCounterProps> = ({ count, setCount
                     Edit <code>src/App.tsx</code> and save to test HMR
                 </Text>
             </div>
-        </Card>
+        </CommonCard>
     )
 }
 

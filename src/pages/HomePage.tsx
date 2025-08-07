@@ -2,6 +2,7 @@ import React from 'react'
 import { Text } from '@fluentui/react-components'
 import BasePage from './BasePage'
 import { ErrorAlert, WelcomeCard, InteractiveCounter, CenteredContent } from '../components'
+import { COMMON_STYLES } from '../constants/styles'
 
 interface HomePageProps {
     title: string
@@ -20,7 +21,7 @@ const HomePage: React.FC<HomePageProps> = ({ title, error, count, setCount }) =>
 
                 <InteractiveCounter count={count} setCount={setCount} />
 
-                <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
+                <Text size={200} style={{ ...COMMON_STYLES.secondaryText, textAlign: 'center', maxWidth: '600px' }}>
                     Click on the Vite and React logos to learn more about the technologies powering this app.
                     The sidebar navigation follows Microsoft Teams design patterns for familiarity.
                 </Text>

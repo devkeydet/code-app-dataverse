@@ -9,6 +9,7 @@ import {
     tokens
 } from '@fluentui/react-components'
 import type { GraphUser_V1 } from '../../Models/Office365UsersModel'
+import { COMMON_STYLES } from '../../constants/styles'
 
 interface UserProfileProps {
     user: GraphUser_V1
@@ -65,7 +66,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                             {displayName}
                         </Text>
                         <br />
-                        <Text size={300} style={{ opacity: 0.7 }}>
+                        <Text size={300} style={COMMON_STYLES.secondaryText}>
                             {user.mail}
                         </Text>
                     </div>

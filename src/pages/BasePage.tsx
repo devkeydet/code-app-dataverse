@@ -1,5 +1,5 @@
-import React from 'react'
 import { Title2 } from '@fluentui/react-components'
+import { STYLE_CONSTANTS, COMMON_STYLES } from '../constants/styles'
 
 interface BasePageProps {
     title: string
@@ -9,11 +9,11 @@ interface BasePageProps {
 const BasePage: React.FC<BasePageProps> = ({ title, children }) => {
     return (
         <div style={{
-            padding: '24px 24px 20px 24px',
+            padding: STYLE_CONSTANTS.LAYOUT.PAGE_PADDING,
             display: 'flex',
             flexDirection: 'column'
         }}>
-            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>
+            <Title2 style={COMMON_STYLES.pageTitle}>
                 {title}
             </Title2>
             {children}

@@ -1,6 +1,4 @@
-import React from 'react'
-import { Text } from '@fluentui/react-components'
-import BasePage from './BasePage'
+import { PlaceholderPage } from '../components'
 
 interface AppsPageProps {
     title: string
@@ -8,11 +6,10 @@ interface AppsPageProps {
 
 const AppsPage: React.FC<AppsPageProps> = ({ title }) => {
     return (
-        <BasePage title={title}>
-            <Text size={400}>
-                Power Platform applications will be displayed here...
-            </Text>
-        </BasePage>
+        <PlaceholderPage
+            title={title}
+            message="Power Platform applications will be displayed here..."
+        />
     )
 }
 

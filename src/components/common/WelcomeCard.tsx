@@ -1,5 +1,6 @@
-import React from 'react'
-import { Card, CardHeader, CardPreview, Title1, Title2, Body1 } from '@fluentui/react-components'
+import { CardHeader, CardPreview, Title1, Title2, Body1 } from '@fluentui/react-components'
+import CommonCard from './CommonCard'
+import { STYLE_CONSTANTS } from '../../constants/styles'
 
 interface WelcomeCardProps {
     style?: React.CSSProperties
@@ -7,14 +8,14 @@ interface WelcomeCardProps {
 
 const WelcomeCard: React.FC<WelcomeCardProps> = ({ style }) => {
     return (
-        <Card style={{ width: '400px', maxWidth: '90%', ...style }}>
+        <CommonCard style={style}>
             <CardPreview>
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '16px',
+                    gap: STYLE_CONSTANTS.SPACING.MD,
                     justifyContent: 'center',
-                    padding: '24px'
+                    padding: STYLE_CONSTANTS.SPACING.LG
                 }}>
                     <img src="/vite.svg" style={{ height: '6em' }} alt="Vite logo" />
                     <Title1>+</Title1>
@@ -30,7 +31,7 @@ const WelcomeCard: React.FC<WelcomeCardProps> = ({ style }) => {
                     </Body1>
                 }
             />
-        </Card>
+        </CommonCard>
     )
 }
 

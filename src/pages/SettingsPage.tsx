@@ -1,6 +1,4 @@
-import React from 'react'
-import { Text } from '@fluentui/react-components'
-import BasePage from './BasePage'
+import { PlaceholderPage } from '../components'
 
 interface SettingsPageProps {
     title: string
@@ -8,11 +6,10 @@ interface SettingsPageProps {
 
 const SettingsPage: React.FC<SettingsPageProps> = ({ title }) => {
     return (
-        <BasePage title={title}>
-            <Text size={400}>
-                Application settings and configuration options...
-            </Text>
-        </BasePage>
+        <PlaceholderPage
+            title={title}
+            message="Application settings and configurations will be displayed here..."
+        />
     )
 }
 
