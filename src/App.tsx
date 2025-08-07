@@ -2,16 +2,11 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Office365UsersService } from './Services/Office365UsersService'
 import type { GraphUser_V1 } from './Models/Office365UsersModel'
+import { ActivityPage, ChatPage, TeamsPage, AppsPage, SettingsPage } from './pages'
 import {
   Avatar,
   Button,
-  Card,
-  CardHeader,
-  CardPreview,
   Text,
-  Title1,
-  Title2,
-  Body1,
   makeStyles,
   shorthands,
   tokens,
@@ -100,34 +95,6 @@ const useStyles = makeStyles({
     justifyContent: 'flex-start',
     ...shorthands.gap('24px'),
   },
-  welcomeCard: {
-    width: '400px',
-    maxWidth: '90%',
-  },
-  logoContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    ...shorthands.gap('16px'),
-    ...shorthands.margin('24px', '0'),
-  },
-  logo: {
-    height: '48px',
-    width: '48px',
-  },
-  counterCard: {
-    width: '300px',
-    maxWidth: '90%',
-    textAlign: 'center',
-  },
-  errorAlert: {
-    width: '400px',
-    maxWidth: '90%',
-    backgroundColor: tokens.colorPaletteRedBackground2,
-    color: tokens.colorPaletteRedForeground1,
-    border: `1px solid ${tokens.colorPaletteRedBorder1}`,
-    borderRadius: tokens.borderRadiusMedium,
-    ...shorthands.padding('12px', '16px'),
-  },
   profilePopover: {
     minWidth: '280px',
     maxWidth: 'min(400px, calc(100vw - 40px))',
@@ -205,102 +172,15 @@ function App() {
   const renderPageContent = () => {
     switch (currentPage) {
       case 'Activity':
-        return (
-          <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
-            {error && (
-              <div className={styles.errorAlert}>
-                <Text weight="semibold">Error loading user profile</Text>
-                <br />
-                <Text size={200}>{error}</Text>
-              </div>
-            )}
-
-            <Card className={styles.welcomeCard}>
-              <CardPreview>
-                <div className={styles.logoContainer}>
-                  <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
-                  <Title1>+</Title1>
-                  <img src="/src/assets/react.svg" className={styles.logo} alt="React logo" />
-                </div>
-              </CardPreview>
-              <CardHeader
-                header={<Title2>Welcome to your Power Platform Code App</Title2>}
-                description={
-                  <Body1>
-                    This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
-                    It connects to Dataverse and Office 365 services.
-                  </Body1>
-                }
-              />
-            </Card>
-
-            <Card className={styles.counterCard}>
-              <CardHeader
-                header={<Title2>Interactive Counter</Title2>}
-                description={
-                  <Body1>
-                    Test the reactivity with this simple counter example.
-                  </Body1>
-                }
-              />
-              <div style={{ padding: '16px', textAlign: 'center' }}>
-                <Button
-                  appearance="primary"
-                  size="large"
-                  onClick={() => setCount((count) => count + 1)}
-                  style={{ marginBottom: '16px' }}
-                >
-                  Count is {count}
-                </Button>
-                <br />
-                <Text size={200}>
-                  Edit <code>src/App.tsx</code> and save to test HMR
-                </Text>
-              </div>
-            </Card>
-
-            <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
-              Click on the Vite and React logos to learn more about the technologies powering this app.
-              The sidebar navigation follows Microsoft Teams design patterns for familiarity.
-            </Text>
-          </div>
-        )
+        return <ActivityPage error={error} count={count} setCount={setCount} />
       case 'Chat':
-        return (
-          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
-            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Chat</Title2>
-            <Text size={400}>
-              Chat functionality coming soon...
-            </Text>
-          </div>
-        )
+        return <ChatPage />
       case 'Teams':
-        return (
-          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
-            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Teams</Title2>
-            <Text size={400}>
-              Teams collaboration features coming soon...
-            </Text>
-          </div>
-        )
+        return <TeamsPage />
       case 'Apps':
-        return (
-          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
-            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Apps</Title2>
-            <Text size={400}>
-              Power Platform applications will be displayed here...
-            </Text>
-          </div>
-        )
+        return <AppsPage />
       case 'Settings':
-        return (
-          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
-            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Settings</Title2>
-            <Text size={400}>
-              Application settings and configuration options...
-            </Text>
-          </div>
-        )
+        return <SettingsPage />
       default:
         return <div>Page not found</div>
     }
