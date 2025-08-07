@@ -2,7 +2,7 @@
 // Following Fluent UI design tokens and Microsoft Teams patterns
 
 export const STYLE_CONSTANTS = {
-    // Card dimensions - used by WelcomeCard and InteractiveCounter
+    // Card dimensions - used by InteractiveCounter and AboutCard
     CARD: {
         width: '400px',
         maxWidth: '90%',

@@ -2,13 +2,20 @@ import { CardHeader, CardPreview, Title1, Title2, Body1 } from '@fluentui/react-
 import CommonCard from './CommonCard'
 import { STYLE_CONSTANTS } from '../../constants/styles'
 
-interface WelcomeCardProps {
+interface AboutCardProps {
     style?: React.CSSProperties
 }
 
-const WelcomeCard: React.FC<WelcomeCardProps> = ({ style }) => {
+const AboutCard: React.FC<AboutCardProps> = ({ style }) => {
+    // Create wide card style - double the width of standard cards
+    const wideCardStyle: React.CSSProperties = {
+        width: '800px', // Double the standard 400px
+        maxWidth: '90%',
+        ...style
+    }
+
     return (
-        <CommonCard style={style}>
+        <CommonCard style={wideCardStyle}>
             <CardPreview>
                 <div style={{
                     display: 'flex',
@@ -23,11 +30,11 @@ const WelcomeCard: React.FC<WelcomeCardProps> = ({ style }) => {
                 </div>
             </CardPreview>
             <CardHeader
-                header={<Title2>Welcome to your Power Platform Code App</Title2>}
+                header={<Title2>About this Power Platform Code App</Title2>}
                 description={
                     <Body1>
-                        This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
-                        It connects to Dataverse and Office 365 services.
+                        This application is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
+                        It connects to Dataverse and Office 365 services, providing a modern Teams-inspired interface for Power Platform development.
                     </Body1>
                 }
             />
@@ -35,4 +42,4 @@ const WelcomeCard: React.FC<WelcomeCardProps> = ({ style }) => {
     )
 }
 
-export default WelcomeCard
+export default AboutCard

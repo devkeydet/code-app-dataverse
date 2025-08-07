@@ -1,6 +1,7 @@
-import { BasePage } from '../components'
+import React from 'react'
 import { Text } from '@fluentui/react-components'
-
+import { BasePage, AboutCard } from '../components'
+import { COMMON_STYLES } from '../constants/styles'
 interface SettingsPageProps {
     title: string
 }
@@ -11,8 +12,14 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ title }) => {
             title={title}
             alignment="center"
         >
-            <Text size={400}>
-                Application settings and configurations will be displayed here...
+            <AboutCard />
+            <Text size={200} style={{
+                ...COMMON_STYLES.secondaryText,
+                textAlign: 'center',
+                maxWidth: '800px'
+            }}>
+                Click on the Vite and React logos to learn more about the technologies powering this app.
+                The sidebar navigation follows Microsoft Teams design patterns for familiarity.
             </Text>
         </BasePage>
     )

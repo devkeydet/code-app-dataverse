@@ -1,7 +1,7 @@
 export { default as ErrorAlert } from './ErrorAlert'
 export { default as NavigationButton } from './NavigationButton'
 export { default as UserProfile } from './UserProfile'
-export { default as WelcomeCard } from './WelcomeCard'
+export { default as AboutCard } from './AboutCard'
 export { default as InteractiveCounter } from './InteractiveCounter'
 export { default as CenteredContent } from './CenteredContent'
 export { default as BasePage } from './BasePage'
