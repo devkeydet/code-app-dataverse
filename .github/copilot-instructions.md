@@ -39,6 +39,45 @@ Files with this header are auto-generated and will be overwritten:
 
 **If changes are needed to these files, they must be regenerated using Power Platform CLI commands, not edited directly.**
 
+## UI Design System
+
+### Fluent UI v9 Design Guidelines
+This app MUST use Fluent UI v9 components and follow Microsoft Fluent Design principles:
+
+**Reference Documentation:**
+- **Fluent Design System**: https://fluent2.microsoft.design/
+- **React Fluent UI v9**: https://react.fluentui.dev/
+
+**Design Requirements:**
+1. **Microsoft Teams Inspiration**: The app should look and feel like Microsoft Teams
+2. **Layout Structure**:
+   - Left navigation panel (similar to Teams sidebar)
+   - Title bar at the top (similar to Teams header)
+   - Main content area
+3. **Theme Support**: Must support both light and dark Fluent themes
+4. **Component Library**: Use only Fluent UI v9 components (@fluentui/react-components)
+5. **Design Tokens**: Use Fluent design tokens for colors, spacing, typography
+6. **Accessibility**: Follow Fluent accessibility guidelines
+7. **Custom Components**: When a Fluent UI v9 component is not available, create custom components that look and behave like Fluent UI v9 components using Fluent design principles, tokens, and styling patterns
+
+**Example Component Usage:**
+```typescript
+import {
+  FluentProvider,
+  webLightTheme,
+  webDarkTheme,
+  Button,
+  Avatar,
+  Text,
+  Card
+} from '@fluentui/react-components';
+
+// Always wrap app in FluentProvider with theme
+<FluentProvider theme={isDarkMode ? webDarkTheme : webLightTheme}>
+  <App />
+</FluentProvider>
+```
+
 ### Power Provider Pattern
 The `PowerProvider` component MUST wrap your entire app to initialize the Power SDK:
 ```tsx
