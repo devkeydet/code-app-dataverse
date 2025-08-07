@@ -37,12 +37,30 @@ import {
 const useStyles = makeStyles({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     width: '100vw',
     height: '100vh',
     margin: 0,
     padding: 0,
     backgroundColor: tokens.colorNeutralBackground1,
     color: tokens.colorNeutralForeground1,
+    overflow: 'hidden',
+  },
+  titleBar: {
+    height: '60px',
+    backgroundColor: tokens.colorNeutralBackground2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    ...shorthands.padding('0', '20px'),
+    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
+    width: '100%',
+    boxSizing: 'border-box',
+    overflow: 'visible',
+  },
+  mainLayout: {
+    display: 'flex',
+    flex: 1,
     overflow: 'hidden',
   },
   sidebar: {
@@ -64,15 +82,6 @@ const useStyles = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-  },
-  titleBar: {
-    height: '60px',
-    backgroundColor: tokens.colorNeutralBackground1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    ...shorthands.padding('0', '20px'),
-    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
   },
   contentArea: {
     flex: 1,
@@ -113,7 +122,7 @@ const useStyles = makeStyles({
   },
   profilePopover: {
     minWidth: '280px',
-    maxWidth: '400px',
+    maxWidth: 'min(400px, calc(100vw - 40px))',
     width: 'max-content',
     ...shorthands.padding('16px'),
   },
@@ -196,171 +205,176 @@ function App() {
       }}
     >
       <div className={styles.root}>
-        {/* Teams-style Left Sidebar */}
-        <div className={styles.sidebar}>
-          <Button
-            appearance="subtle"
-            icon={<Home24Regular />}
-            className={styles.sidebarButton}
-            title="Home"
-          />
-          <Button
-            appearance="subtle"
-            icon={<Chat24Regular />}
-            className={styles.sidebarButton}
-            title="Chat"
-          />
-          <Button
-            appearance="subtle"
-            icon={<People24Regular />}
-            className={styles.sidebarButton}
-            title="Teams"
-          />
-          <Button
-            appearance="subtle"
-            icon={<Apps24Regular />}
-            className={styles.sidebarButton}
-            title="Apps"
-          />
-          <Button
-            appearance="subtle"
-            icon={<Settings24Regular />}
-            className={styles.sidebarButton}
-            title="Settings"
-          />
-        </div>
-
-        {/* Main Content Area */}
-        <div className={styles.mainContent}>
-          {/* Teams-style Title Bar */}
-          <div className={styles.titleBar}>
+        {/* Teams-style Title Bar */}
+        <div className={styles.titleBar}>
+          <div style={{ flexShrink: 1, minWidth: 0 }}>
             <Title2>Power Platform Code App</Title2>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              {/* Theme Toggle Button */}
-              <Button
-                appearance="subtle"
-                icon={isDarkTheme ? <WeatherSunny24Regular /> : <WeatherMoon24Regular />}
-                onClick={() => setIsDarkTheme(!isDarkTheme)}
-                title={`Switch to ${isDarkTheme ? 'light' : 'dark'} theme`}
-              />
-
-              {/* User Profile in Title Bar */}
-              {loading ? (
-                <Spinner size="tiny" />
-              ) : user ? (
-                <Popover
-                  open={isProfilePopoverOpen}
-                  onOpenChange={(_, data) => setIsProfilePopoverOpen(data.open)}
-                  positioning={{ align: 'end', position: 'below', offset: { mainAxis: 0, crossAxis: 0 } }}
-                >
-                  <PopoverTrigger disableButtonEnhancement>
-                    <Tooltip
-                      content={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
-                      relationship="label"
-                    >
-                      <Avatar
-                        className={styles.profileAvatar}
-                        image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
-                        name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
-                        size={32}
-                      />
-                    </Tooltip>
-                  </PopoverTrigger>
-                  <PopoverSurface className={styles.profilePopover}>
-                    <div className={styles.profilePopoverHeader}>
-                      <Avatar
-                        image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
-                        name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
-                        size={48}
-                      />
-                      <div className={styles.profilePopoverText}>
-                        <Text weight="semibold" size={400}>
-                          {user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
-                        </Text>
-                        <br />
-                        <Text size={300} style={{ opacity: 0.7 }}>
-                          {user.mail}
-                        </Text>
-                      </div>
-                    </div>
-                    <div style={{ borderTop: `1px solid ${tokens.colorNeutralStroke2}`, paddingTop: '12px' }}>
-                      <Text size={200}>
-                        Office 365 User Profile
-                      </Text>
-                      <br />
-                      <Text size={200} style={{ opacity: 0.6 }}>
-                        Connected via Power Platform
-                      </Text>
-                    </div>
-                  </PopoverSurface>
-                </Popover>
-              ) : (
-                <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
-                  Profile unavailable
-                </Text>
-              )}
-            </div>
           </div>
 
-          {/* Content Area */}
-          <div className={styles.contentArea}>
-            {error && (
-              <div className={styles.errorAlert}>
-                <Text weight="semibold">Error loading user profile</Text>
-                <br />
-                <Text size={200}>{error}</Text>
-              </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, marginRight: '0' }}>
+            {/* Theme Toggle Button */}
+            <Button
+              appearance="subtle"
+              icon={isDarkTheme ? <WeatherSunny24Regular /> : <WeatherMoon24Regular />}
+              onClick={() => setIsDarkTheme(!isDarkTheme)}
+              title={`Switch to ${isDarkTheme ? 'light' : 'dark'} theme`}
+            />
+
+            {/* User Profile in Title Bar */}
+            {loading ? (
+              <Spinner size="tiny" />
+            ) : user ? (
+              <Popover
+                open={isProfilePopoverOpen}
+                onOpenChange={(_, data) => setIsProfilePopoverOpen(data.open)}
+                positioning="below-end"
+              >
+                <PopoverTrigger disableButtonEnhancement>
+                  <Tooltip
+                    content={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                    relationship="label"
+                  >
+                    <Avatar
+                      className={styles.profileAvatar}
+                      image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
+                      name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                      size={32}
+                    />
+                  </Tooltip>
+                </PopoverTrigger>
+                <PopoverSurface className={styles.profilePopover}>
+                  <div className={styles.profilePopoverHeader}>
+                    <Avatar
+                      image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
+                      name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                      size={48}
+                    />
+                    <div className={styles.profilePopoverText}>
+                      <Text weight="semibold" size={400}>
+                        {user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                      </Text>
+                      <br />
+                      <Text size={300} style={{ opacity: 0.7 }}>
+                        {user.mail}
+                      </Text>
+                    </div>
+                  </div>
+                  <div style={{ borderTop: `1px solid ${tokens.colorNeutralStroke2}`, paddingTop: '12px' }}>
+                    <Text size={200}>
+                      Office 365 User Profile
+                    </Text>
+                    <br />
+                    <Text size={200} style={{ opacity: 0.6 }}>
+                      Connected via Power Platform
+                    </Text>
+                  </div>
+                </PopoverSurface>
+              </Popover>
+            ) : (
+              <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+                Profile unavailable
+              </Text>
             )}
+          </div>
+        </div>
 
-            <Card className={styles.welcomeCard}>
-              <CardPreview>
-                <div className={styles.logoContainer}>
-                  <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
-                  <Title1>+</Title1>
-                  <img src="/src/assets/react.svg" className={styles.logo} alt="React logo" />
+        {/* Main Layout with Sidebar and Content */}
+        <div className={styles.mainLayout}>
+          {/* Teams-style Left Sidebar */}
+          <div className={styles.sidebar}>
+            <Button
+              appearance="subtle"
+              icon={<Home24Regular />}
+              className={styles.sidebarButton}
+              title="Home"
+            />
+            <Button
+              appearance="subtle"
+              icon={<Chat24Regular />}
+              className={styles.sidebarButton}
+              title="Chat"
+            />
+            <Button
+              appearance="subtle"
+              icon={<People24Regular />}
+              className={styles.sidebarButton}
+              title="Teams"
+            />
+            <Button
+              appearance="subtle"
+              icon={<Apps24Regular />}
+              className={styles.sidebarButton}
+              title="Apps"
+            />
+            <Button
+              appearance="subtle"
+              icon={<Settings24Regular />}
+              className={styles.sidebarButton}
+              title="Settings"
+            />
+          </div>
+
+          {/* Main Content Area */}
+          <div className={styles.mainContent}>
+            {/* Content Area */}
+            <div className={styles.contentArea}>
+              {error && (
+                <div className={styles.errorAlert}>
+                  <Text weight="semibold">Error loading user profile</Text>
+                  <br />
+                  <Text size={200}>{error}</Text>
                 </div>
-              </CardPreview>
-              <CardHeader
-                header={<Title2>Welcome to your Power Platform Code App</Title2>}
-                description={
-                  <Body1>
-                    This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
-                    It connects to Dataverse and Office 365 services.
-                  </Body1>
-                }
-              />
-            </Card>
+              )}
 
-            <Card className={styles.counterCard}>
-              <CardHeader
-                header={<Title2>Interactive Counter</Title2>}
-                description={
-                  <Body1>
-                    Test the reactivity with this simple counter example.
-                  </Body1>
-                }
-              />
-              <div style={{ padding: '16px', textAlign: 'center' }}>
-                <Button
-                  appearance="primary"
-                  size="large"
-                  onClick={() => setCount((count) => count + 1)}
-                  style={{ marginBottom: '16px' }}
-                >
-                  Count is {count}
-                </Button>
-                <br />
-                <Text size={200}>
-                  Edit <code>src/App.tsx</code> and save to test HMR
-                </Text>
-              </div>
-            </Card>
+              <Card className={styles.welcomeCard}>
+                <CardPreview>
+                  <div className={styles.logoContainer}>
+                    <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
+                    <Title1>+</Title1>
+                    <img src="/src/assets/react.svg" className={styles.logo} alt="React logo" />
+                  </div>
+                </CardPreview>
+                <CardHeader
+                  header={<Title2>Welcome to your Power Platform Code App</Title2>}
+                  description={
+                    <Body1>
+                      This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
+                      It connects to Dataverse and Office 365 services.
+                    </Body1>
+                  }
+                />
+              </Card>
 
-            <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
-              Click on the Vite and React logos to learn more about the technologies powering this app.
-              The sidebar navigation follows Microsoft Teams design patterns for familiarity.
-            </Text>
+              <Card className={styles.counterCard}>
+                <CardHeader
+                  header={<Title2>Interactive Counter</Title2>}
+                  description={
+                    <Body1>
+                      Test the reactivity with this simple counter example.
+                    </Body1>
+                  }
+                />
+                <div style={{ padding: '16px', textAlign: 'center' }}>
+                  <Button
+                    appearance="primary"
+                    size="large"
+                    onClick={() => setCount((count) => count + 1)}
+                    style={{ marginBottom: '16px' }}
+                  >
+                    Count is {count}
+                  </Button>
+                  <br />
+                  <Text size={200}>
+                    Edit <code>src/App.tsx</code> and save to test HMR
+                  </Text>
+                </div>
+              </Card>
+
+              <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
+                Click on the Vite and React logos to learn more about the technologies powering this app.
+                The sidebar navigation follows Microsoft Teams design patterns for familiarity.
+              </Text>
+            </div>
           </div>
         </div>
       </div>
