@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HomePage, ChatPage, TeamsPage, AppsPage, SettingsPage } from './pages'
 import { TitleBar, Sidebar, UserProfile } from './components'
-import { useUserProfile } from './hooks'
+import { useUserProfile, usePageAlignment } from './hooks'
 import {
   Text,
   makeStyles,
@@ -76,9 +76,8 @@ const useStyles = makeStyles({
     ...shorthands.padding('0px'),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    ...shorthands.gap('24px'),
+    height: '100%', // Ensure full height
+    overflow: 'auto', // Allow scrolling if content overflows
   },
   profilePopover: {
     minWidth: '280px',
@@ -111,19 +110,22 @@ function App() {
   const [currentPage, setCurrentPage] = useState('Home')
 
   const { user, userPhoto, loading, error } = useUserProfile()
+  const { getAlignment } = usePageAlignment()
 
   const renderPageContent = () => {
+    const alignment = getAlignment(currentPage)
+
     switch (currentPage) {
       case 'Home':
-        return <HomePage title={currentPage} error={error} count={count} setCount={setCount} />
+        return <HomePage title={currentPage} error={error} count={count} setCount={setCount} alignment={alignment} />
       case 'Chat':
-        return <ChatPage title={currentPage} />
+        return <ChatPage title={currentPage} alignment={alignment} />
       case 'Teams':
-        return <TeamsPage title={currentPage} />
+        return <TeamsPage title={currentPage} alignment={alignment} />
       case 'Apps':
-        return <AppsPage title={currentPage} />
+        return <AppsPage title={currentPage} alignment={alignment} />
       case 'Settings':
-        return <SettingsPage title={currentPage} />
+        return <SettingsPage title={currentPage} alignment={alignment} />
       default:
         return <div>Page not found</div>
     }
