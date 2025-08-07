@@ -11,14 +11,14 @@ import {
 } from '@fluentui/react-components'
 import BasePage from './BasePage'
 
-interface ActivityPageProps {
+interface HomePageProps {
     title: string
     error?: string | null
     count: number
     setCount: (count: number | ((prev: number) => number)) => void
 }
 
-const ActivityPage: React.FC<ActivityPageProps> = ({ title, error, count, setCount }) => {
+const HomePage: React.FC<HomePageProps> = ({ title, error, count, setCount }) => {
     return (
         <BasePage title={title}>
             <div style={{
@@ -101,4 +101,4 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ title, error, count, setCou
     )
 }
 
-export default ActivityPage
+export default HomePage

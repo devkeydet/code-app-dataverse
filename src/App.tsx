@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Office365UsersService } from './Services/Office365UsersService'
 import type { GraphUser_V1 } from './Models/Office365UsersModel'
-import { ActivityPage, ChatPage, TeamsPage, AppsPage, SettingsPage } from './pages'
+import { HomePage, ChatPage, TeamsPage, AppsPage, SettingsPage } from './pages'
 import {
   Avatar,
   Button,
@@ -127,7 +127,7 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
   const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false)
-  const [currentPage, setCurrentPage] = useState('Activity')
+  const [currentPage, setCurrentPage] = useState('Home')
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -171,8 +171,8 @@ function App() {
 
   const renderPageContent = () => {
     switch (currentPage) {
-      case 'Activity':
-        return <ActivityPage title={currentPage} error={error} count={count} setCount={setCount} />
+      case 'Home':
+        return <HomePage title={currentPage} error={error} count={count} setCount={setCount} />
       case 'Chat':
         return <ChatPage title={currentPage} />
       case 'Teams':
@@ -279,12 +279,12 @@ function App() {
             <Button
               appearance="subtle"
               className={styles.sidebarButton}
-              title="Activity"
-              onClick={() => setCurrentPage('Activity')}
+              title="Home"
+              onClick={() => setCurrentPage('Home')}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                 <Home24Regular />
-                <span style={{ fontSize: '10px' }}>Activity</span>
+                <span style={{ fontSize: '10px' }}>Home</span>
               </div>
             </Button>
             <Button

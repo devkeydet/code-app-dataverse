@@ -1,4 +1,4 @@
-export { default as ActivityPage } from './ActivityPage'
+export { default as HomePage } from './HomePage'
 export { default as ChatPage } from './ChatPage'
 export { default as TeamsPage } from './TeamsPage'
 export { default as AppsPage } from './AppsPage'
