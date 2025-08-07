@@ -41,12 +41,16 @@ export const COMMON_STYLES = {
     standardCard: {
         width: STYLE_CONSTANTS.CARD.width,
         maxWidth: STYLE_CONSTANTS.CARD.maxWidth,
+        minHeight: 'fit-content', // Maintain content-based height
+        flexShrink: 0, // Prevent shrinking
     },
 
     // Card with settings page dimensions (wider)
     settingsCard: {
         width: STYLE_CONSTANTS.SETTINGS_CARD.width,
         maxWidth: STYLE_CONSTANTS.SETTINGS_CARD.maxWidth,
+        minHeight: 'fit-content', // Maintain content-based height
+        flexShrink: 0, // Prevent shrinking
     },
 
     // Secondary text styling
