@@ -172,15 +172,15 @@ function App() {
   const renderPageContent = () => {
     switch (currentPage) {
       case 'Activity':
-        return <ActivityPage error={error} count={count} setCount={setCount} />
+        return <ActivityPage title={currentPage} error={error} count={count} setCount={setCount} />
       case 'Chat':
-        return <ChatPage />
+        return <ChatPage title={currentPage} />
       case 'Teams':
-        return <TeamsPage />
+        return <TeamsPage title={currentPage} />
       case 'Apps':
-        return <AppsPage />
+        return <AppsPage title={currentPage} />
       case 'Settings':
-        return <SettingsPage />
+        return <SettingsPage title={currentPage} />
       default:
         return <div>Page not found</div>
     }
