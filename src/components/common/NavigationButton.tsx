@@ -38,10 +38,10 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
     // Blue vertical line overlay for selected state
     const blueLineStyle: React.CSSProperties = {
         position: 'absolute',
-        left: '0',
-        top: '0',
-        bottom: '0',
-        width: '3px',
+        left: '-12px', // Push all the way to the absolute left edge of the browser frame
+        top: '8px', // Shorter line height by adding top margin
+        bottom: '8px', // Shorter line height by adding bottom margin
+        width: '2px', // Thinner line
         backgroundColor: tokens.colorBrandBackground,
         display: isActive ? 'block' : 'none',
     }
