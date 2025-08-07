@@ -11,26 +11,17 @@ export const STYLE_CONSTANTS = {
     // Common opacity values for secondary text
     OPACITY: {
         SECONDARY: 0.7,
-        TERTIARY: 0.6,
     },
 
     // Spacing values following Fluent design tokens
     SPACING: {
-        XS: '8px',
-        SM: '12px',
         MD: '16px',
         LG: '24px',
-        XL: '32px',
     },
 
     // Common layout patterns
     LAYOUT: {
         PAGE_PADDING: '24px 24px 20px 24px',
-        CENTER_FLEX: {
-            display: 'flex',
-            flexDirection: 'column' as const,
-            alignItems: 'center' as const,
-        },
         ICON_SIZE: {
             width: '24px',
             height: '24px',
@@ -49,17 +40,6 @@ export const COMMON_STYLES = {
     // Secondary text styling
     secondaryText: {
         opacity: STYLE_CONSTANTS.OPACITY.SECONDARY,
-    },
-
-    // Tertiary text styling  
-    tertiaryText: {
-        opacity: STYLE_CONSTANTS.OPACITY.TERTIARY,
-    },
-
-    // Centered content layout
-    centeredContent: {
-        textAlign: 'center' as const,
-        maxWidth: '600px',
     },
 
     // Page title styling

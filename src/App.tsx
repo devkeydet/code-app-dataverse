@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import { HomePage, ChatPage, TeamsPage, AppsPage, SettingsPage } from './pages'
 import { TitleBar, Sidebar, UserProfile } from './components'
 import { useUserProfile } from './hooks'
