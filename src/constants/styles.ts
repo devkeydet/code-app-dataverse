@@ -8,6 +8,12 @@ export const STYLE_CONSTANTS = {
         maxWidth: '90%',
     },
 
+    // Settings page card dimensions - wider cards for settings
+    SETTINGS_CARD: {
+        width: '800px', // Double the standard width
+        maxWidth: '90%',
+    },
+
     // Common opacity values for secondary text
     OPACITY: {
         SECONDARY: 0.7,
@@ -35,6 +41,12 @@ export const COMMON_STYLES = {
     standardCard: {
         width: STYLE_CONSTANTS.CARD.width,
         maxWidth: STYLE_CONSTANTS.CARD.maxWidth,
+    },
+
+    // Card with settings page dimensions (wider)
+    settingsCard: {
+        width: STYLE_CONSTANTS.SETTINGS_CARD.width,
+        maxWidth: STYLE_CONSTANTS.SETTINGS_CARD.maxWidth,
     },
 
     // Secondary text styling

@@ -1,21 +1,14 @@
 import { CardHeader, CardPreview, Title1, Title2, Body1 } from '@fluentui/react-components'
 import CommonCard from './CommonCard'
-import { STYLE_CONSTANTS } from '../../constants/styles'
+import { STYLE_CONSTANTS, COMMON_STYLES } from '../../constants/styles'
 
 interface AboutCardProps {
     style?: React.CSSProperties
 }
 
 const AboutCard: React.FC<AboutCardProps> = ({ style }) => {
-    // Create wide card style - double the width of standard cards
-    const wideCardStyle: React.CSSProperties = {
-        width: '800px', // Double the standard 400px
-        maxWidth: '90%',
-        ...style
-    }
-
     return (
-        <CommonCard style={wideCardStyle}>
+        <CommonCard style={{ ...COMMON_STYLES.settingsCard, ...style }}>
             <CardPreview>
                 <div style={{
                     display: 'flex',

@@ -122,7 +122,11 @@ function App() {
       case 'Apps':
         return <AppsPage title={currentPage} />
       case 'Settings':
-        return <SettingsPage title={currentPage} />
+        return <SettingsPage
+          title={currentPage}
+          isDarkTheme={isDarkTheme}
+          onThemeToggle={() => setIsDarkTheme(!isDarkTheme)}
+        />
       default:
         return <div>Page not found</div>
     }
