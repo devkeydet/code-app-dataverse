@@ -1,16 +1,127 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { Office365UsersService } from './Services/Office365UsersService'
 import type { GraphUser_V1 } from './Models/Office365UsersModel'
+import {
+  Avatar,
+  Button,
+  Card,
+  CardHeader,
+  CardPreview,
+  Text,
+  Title1,
+  Title2,
+  Body1,
+  makeStyles,
+  shorthands,
+  tokens,
+  Spinner,
+  FluentProvider,
+  webLightTheme,
+  webDarkTheme
+} from '@fluentui/react-components'
+import {
+  Home24Regular,
+  Chat24Regular,
+  People24Regular,
+  Settings24Regular,
+  Apps24Regular,
+  WeatherSunny24Regular,
+  WeatherMoon24Regular
+} from '@fluentui/react-icons'
+
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    width: '100vw',
+    height: '100vh',
+    margin: 0,
+    padding: 0,
+    backgroundColor: tokens.colorNeutralBackground1,
+    color: tokens.colorNeutralForeground1,
+    overflow: 'hidden',
+  },
+  sidebar: {
+    width: '80px',
+    backgroundColor: tokens.colorNeutralBackground2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    ...shorthands.padding('16px', '8px'),
+    ...shorthands.gap('16px'),
+    borderRight: `1px solid ${tokens.colorNeutralStroke2}`,
+  },
+  sidebarButton: {
+    width: '48px',
+    height: '48px',
+    ...shorthands.borderRadius('8px'),
+  },
+  mainContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  titleBar: {
+    height: '60px',
+    backgroundColor: tokens.colorNeutralBackground1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    ...shorthands.padding('0', '20px'),
+    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
+  },
+  userProfile: {
+    display: 'flex',
+    alignItems: 'center',
+    ...shorthands.gap('12px'),
+  },
+  contentArea: {
+    flex: 1,
+    ...shorthands.padding('24px'),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shorthands.gap('24px'),
+  },
+  welcomeCard: {
+    width: '400px',
+    maxWidth: '90%',
+  },
+  logoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    ...shorthands.gap('16px'),
+    ...shorthands.margin('24px', '0'),
+  },
+  logo: {
+    height: '48px',
+    width: '48px',
+  },
+  counterCard: {
+    width: '300px',
+    maxWidth: '90%',
+    textAlign: 'center',
+  },
+  errorAlert: {
+    width: '400px',
+    maxWidth: '90%',
+    backgroundColor: tokens.colorPaletteRedBackground2,
+    color: tokens.colorPaletteRedForeground1,
+    border: `1px solid ${tokens.colorPaletteRedBorder1}`,
+    borderRadius: tokens.borderRadiusMedium,
+    ...shorthands.padding('12px', '16px'),
+  }
+})
 
 function App() {
+  const styles = useStyles()
   const [count, setCount] = useState(0)
   const [user, setUser] = useState<GraphUser_V1 | null>(null)
   const [userPhoto, setUserPhoto] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isDarkTheme, setIsDarkTheme] = useState(true)
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -53,85 +164,158 @@ function App() {
   }, [])
 
   return (
-    <>
-      {/* User Profile Card */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        background: '#1a1a1a',
-        border: '1px solid #646cff',
-        borderRadius: '8px',
-        padding: '12px',
-        boxShadow: '0 2px 8px rgba(100, 108, 255, 0.2)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        minWidth: '200px'
-      }}>
-        {loading ? (
-          <div>Loading...</div>
-        ) : user ? (
-          <>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              overflow: 'hidden',
-              background: '#2a2a2a',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              {userPhoto ? (
-                <img
-                  src={`data:image/jpeg;base64,${userPhoto}`}
-                  alt="User profile"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <span style={{ fontSize: '18px', color: '#999' }}>
-                  {user.givenName?.[0] || user.displayName?.[0] || '?'}
-                </span>
-              )}
-            </div>
-            <div style={{ flex: 1, textAlign: 'left' }}>
-              <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#ffffff' }}>
-                {user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
-              </div>
-              <div style={{ fontSize: '12px', color: '#999' }}>
-                ({user.mail})
-              </div>
-            </div>
-          </>
-        ) : (
-          <div style={{ color: '#ff6b6b', fontSize: '12px' }}>
-            {error ? `Error: ${error}` : 'Failed to load profile'}
-          </div>
-        )}
-      </div>
+    <FluentProvider
+      theme={isDarkTheme ? webDarkTheme : webLightTheme}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        padding: 0,
+        display: 'block'
+      }}
+    >
+      <div className={styles.root}>
+        {/* Teams-style Left Sidebar */}
+        <div className={styles.sidebar}>
+          <Button
+            appearance="subtle"
+            icon={<Home24Regular />}
+            className={styles.sidebarButton}
+            title="Home"
+          />
+          <Button
+            appearance="subtle"
+            icon={<Chat24Regular />}
+            className={styles.sidebarButton}
+            title="Chat"
+          />
+          <Button
+            appearance="subtle"
+            icon={<People24Regular />}
+            className={styles.sidebarButton}
+            title="Teams"
+          />
+          <Button
+            appearance="subtle"
+            icon={<Apps24Regular />}
+            className={styles.sidebarButton}
+            title="Apps"
+          />
+          <Button
+            appearance="subtle"
+            icon={<Settings24Regular />}
+            className={styles.sidebarButton}
+            title="Settings"
+          />
+        </div>
 
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {/* Main Content Area */}
+        <div className={styles.mainContent}>
+          {/* Teams-style Title Bar */}
+          <div className={styles.titleBar}>
+            <Title2>Power Platform Code App</Title2>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              {/* Theme Toggle Button */}
+              <Button
+                appearance="subtle"
+                icon={isDarkTheme ? <WeatherSunny24Regular /> : <WeatherMoon24Regular />}
+                onClick={() => setIsDarkTheme(!isDarkTheme)}
+                title={`Switch to ${isDarkTheme ? 'light' : 'dark'} theme`}
+              />
+
+              {/* User Profile in Title Bar */}
+              <div className={styles.userProfile}>
+                {loading ? (
+                  <Spinner size="tiny" />
+                ) : user ? (
+                  <>
+                    <Avatar
+                      image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
+                      name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                      size={32}
+                    />
+                    <div>
+                      <Text weight="semibold" size={300}>
+                        {user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                      </Text>
+                      <br />
+                      <Text size={200} style={{ opacity: 0.7 }}>
+                        {user.mail}
+                      </Text>
+                    </div>
+                  </>
+                ) : (
+                  <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+                    Profile unavailable
+                  </Text>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Content Area */}
+          <div className={styles.contentArea}>
+            {error && (
+              <div className={styles.errorAlert}>
+                <Text weight="semibold">Error loading user profile</Text>
+                <br />
+                <Text size={200}>{error}</Text>
+              </div>
+            )}
+
+            <Card className={styles.welcomeCard}>
+              <CardPreview>
+                <div className={styles.logoContainer}>
+                  <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
+                  <Title1>+</Title1>
+                  <img src="/src/assets/react.svg" className={styles.logo} alt="React logo" />
+                </div>
+              </CardPreview>
+              <CardHeader
+                header={<Title2>Welcome to your Power Platform Code App</Title2>}
+                description={
+                  <Body1>
+                    This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
+                    It connects to Dataverse and Office 365 services.
+                  </Body1>
+                }
+              />
+            </Card>
+
+            <Card className={styles.counterCard}>
+              <CardHeader
+                header={<Title2>Interactive Counter</Title2>}
+                description={
+                  <Body1>
+                    Test the reactivity with this simple counter example.
+                  </Body1>
+                }
+              />
+              <div style={{ padding: '16px', textAlign: 'center' }}>
+                <Button
+                  appearance="primary"
+                  size="large"
+                  onClick={() => setCount((count) => count + 1)}
+                  style={{ marginBottom: '16px' }}
+                >
+                  Count is {count}
+                </Button>
+                <br />
+                <Text size={200}>
+                  Edit <code>src/App.tsx</code> and save to test HMR
+                </Text>
+              </div>
+            </Card>
+
+            <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
+              Click on the Vite and React logos to learn more about the technologies powering this app.
+              The sidebar navigation follows Microsoft Teams design patterns for familiarity.
+            </Text>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </FluentProvider>
   )
 }
 
