@@ -47,7 +47,7 @@ const useStyles = makeStyles({
     overflow: 'hidden',
   },
   titleBar: {
-    height: '60px',
+    height: '48px',
     backgroundColor: tokens.colorNeutralBackground2,
     display: 'flex',
     alignItems: 'center',
@@ -64,19 +64,27 @@ const useStyles = makeStyles({
     overflow: 'hidden',
   },
   sidebar: {
-    width: '80px',
+    width: '56px',
     backgroundColor: tokens.colorNeutralBackground2,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    ...shorthands.padding('16px', '8px'),
-    ...shorthands.gap('16px'),
+    ...shorthands.padding('8px', '4px'),
+    ...shorthands.gap('4px'),
     borderRight: `1px solid ${tokens.colorNeutralStroke2}`,
   },
   sidebarButton: {
     width: '48px',
-    height: '48px',
-    ...shorthands.borderRadius('8px'),
+    height: '60px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shorthands.borderRadius('6px'),
+    ...shorthands.padding('6px', '2px'),
+    fontSize: '10px',
+    fontWeight: '400',
+    lineHeight: '12px',
   },
   mainContent: {
     flex: 1,
@@ -207,9 +215,9 @@ function App() {
       <div className={styles.root}>
         {/* Teams-style Title Bar */}
         <div className={styles.titleBar}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 1, minWidth: 0 }}>
-            <img src="/src/assets/react.svg" style={{ height: '32px', width: '32px' }} alt="React logo" />
-            <Title2>Power Platform Code App using Dataverse (Fluent / Teams inspired) </Title2>
+          <div style={{ display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: 0 }}>
+            <img src="/src/assets/react.svg" style={{ height: '24px', width: '24px', marginLeft: '0px' }} alt="React logo" />
+            <Text size={500} weight="semibold" style={{ marginLeft: '24px' }}>Power Platform Code App using Dataverse (Fluent / Teams inspired) </Text>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, marginRight: '0' }}>
@@ -285,34 +293,54 @@ function App() {
           <div className={styles.sidebar}>
             <Button
               appearance="subtle"
-              icon={<Home24Regular />}
               className={styles.sidebarButton}
               title="Home"
-            />
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                <Home24Regular />
+                <span style={{ fontSize: '10px' }}>Home</span>
+              </div>
+            </Button>
             <Button
               appearance="subtle"
-              icon={<Chat24Regular />}
               className={styles.sidebarButton}
               title="Chat"
-            />
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                <Chat24Regular />
+                <span style={{ fontSize: '10px' }}>Chat</span>
+              </div>
+            </Button>
             <Button
               appearance="subtle"
-              icon={<People24Regular />}
               className={styles.sidebarButton}
               title="Teams"
-            />
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                <People24Regular />
+                <span style={{ fontSize: '10px' }}>Teams</span>
+              </div>
+            </Button>
             <Button
               appearance="subtle"
-              icon={<Apps24Regular />}
               className={styles.sidebarButton}
               title="Apps"
-            />
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                <Apps24Regular />
+                <span style={{ fontSize: '10px' }}>Apps</span>
+              </div>
+            </Button>
             <Button
               appearance="subtle"
-              icon={<Settings24Regular />}
               className={styles.sidebarButton}
               title="Settings"
-            />
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                <Settings24Regular />
+                <span style={{ fontSize: '10px' }}>Settings</span>
+              </div>
+            </Button>
           </div>
 
           {/* Main Content Area */}
