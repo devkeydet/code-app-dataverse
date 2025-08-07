@@ -18,7 +18,11 @@ import {
   Spinner,
   FluentProvider,
   webLightTheme,
-  webDarkTheme
+  webDarkTheme,
+  Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverSurface
 } from '@fluentui/react-components'
 import {
   Home24Regular,
@@ -70,11 +74,6 @@ const useStyles = makeStyles({
     ...shorthands.padding('0', '20px'),
     borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
   },
-  userProfile: {
-    display: 'flex',
-    alignItems: 'center',
-    ...shorthands.gap('12px'),
-  },
   contentArea: {
     flex: 1,
     ...shorthands.padding('24px'),
@@ -111,6 +110,27 @@ const useStyles = makeStyles({
     border: `1px solid ${tokens.colorPaletteRedBorder1}`,
     borderRadius: tokens.borderRadiusMedium,
     ...shorthands.padding('12px', '16px'),
+  },
+  profilePopover: {
+    minWidth: '280px',
+    maxWidth: '400px',
+    width: 'max-content',
+    ...shorthands.padding('16px'),
+  },
+  profilePopoverHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    ...shorthands.gap('12px'),
+    ...shorthands.margin('0', '0', '12px', '0'),
+  },
+  profilePopoverText: {
+    whiteSpace: 'nowrap',
+  },
+  profileAvatar: {
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: 0.8,
+    },
   }
 })
 
@@ -122,6 +142,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
+  const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false)
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -225,32 +246,60 @@ function App() {
               />
 
               {/* User Profile in Title Bar */}
-              <div className={styles.userProfile}>
-                {loading ? (
-                  <Spinner size="tiny" />
-                ) : user ? (
-                  <>
-                    <Avatar
-                      image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
-                      name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
-                      size={32}
-                    />
-                    <div>
-                      <Text weight="semibold" size={300}>
-                        {user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+              {loading ? (
+                <Spinner size="tiny" />
+              ) : user ? (
+                <Popover
+                  open={isProfilePopoverOpen}
+                  onOpenChange={(_, data) => setIsProfilePopoverOpen(data.open)}
+                  positioning={{ align: 'end', position: 'below', offset: { mainAxis: 0, crossAxis: 0 } }}
+                >
+                  <PopoverTrigger disableButtonEnhancement>
+                    <Tooltip
+                      content={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                      relationship="label"
+                    >
+                      <Avatar
+                        className={styles.profileAvatar}
+                        image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
+                        name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                        size={32}
+                      />
+                    </Tooltip>
+                  </PopoverTrigger>
+                  <PopoverSurface className={styles.profilePopover}>
+                    <div className={styles.profilePopoverHeader}>
+                      <Avatar
+                        image={userPhoto ? { src: `data:image/jpeg;base64,${userPhoto}` } : undefined}
+                        name={user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                        size={48}
+                      />
+                      <div className={styles.profilePopoverText}>
+                        <Text weight="semibold" size={400}>
+                          {user.displayName || `${user.givenName || ''} ${user.surname || ''}`.trim()}
+                        </Text>
+                        <br />
+                        <Text size={300} style={{ opacity: 0.7 }}>
+                          {user.mail}
+                        </Text>
+                      </div>
+                    </div>
+                    <div style={{ borderTop: `1px solid ${tokens.colorNeutralStroke2}`, paddingTop: '12px' }}>
+                      <Text size={200}>
+                        Office 365 User Profile
                       </Text>
                       <br />
-                      <Text size={200} style={{ opacity: 0.7 }}>
-                        {user.mail}
+                      <Text size={200} style={{ opacity: 0.6 }}>
+                        Connected via Power Platform
                       </Text>
                     </div>
-                  </>
-                ) : (
-                  <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
-                    Profile unavailable
-                  </Text>
-                )}
-              </div>
+                  </PopoverSurface>
+                </Popover>
+              ) : (
+                <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+                  Profile unavailable
+                </Text>
+              )}
             </div>
           </div>
 
