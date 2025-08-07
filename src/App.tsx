@@ -113,13 +113,24 @@ function App() {
   })
 
   const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false)
-  const [currentPage, setCurrentPage] = useState('Home')
+
+  // Initialize current page from localStorage or default to 'Home'
+  const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = localStorage.getItem('currentPage')
+    return savedPage ? savedPage : 'Home'
+  })
 
   // Function to toggle theme and persist to localStorage
   const toggleTheme = () => {
     const newTheme = !isDarkTheme
     setIsDarkTheme(newTheme)
     localStorage.setItem('isDarkTheme', JSON.stringify(newTheme))
+  }
+
+  // Function to change page and persist to localStorage
+  const changePage = (page: string) => {
+    setCurrentPage(page)
+    localStorage.setItem('currentPage', page)
   }
 
   const { user, userPhoto, loading, error } = useUserProfile()
@@ -183,7 +194,7 @@ function App() {
         <div className={styles.mainLayout}>
           <Sidebar
             currentPage={currentPage}
-            onPageChange={setCurrentPage}
+            onPageChange={changePage}
             className={styles.sidebar}
             buttonClassName={styles.sidebarButton}
           />
