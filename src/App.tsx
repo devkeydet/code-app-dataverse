@@ -93,11 +93,11 @@ const useStyles = makeStyles({
   },
   contentArea: {
     flex: 1,
-    ...shorthands.padding('24px'),
+    ...shorthands.padding('0px'),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     ...shorthands.gap('24px'),
   },
   welcomeCard: {
@@ -160,6 +160,7 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
   const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState('Activity')
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -201,6 +202,110 @@ function App() {
     loadUserProfile()
   }, [])
 
+  const renderPageContent = () => {
+    switch (currentPage) {
+      case 'Activity':
+        return (
+          <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+            {error && (
+              <div className={styles.errorAlert}>
+                <Text weight="semibold">Error loading user profile</Text>
+                <br />
+                <Text size={200}>{error}</Text>
+              </div>
+            )}
+
+            <Card className={styles.welcomeCard}>
+              <CardPreview>
+                <div className={styles.logoContainer}>
+                  <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
+                  <Title1>+</Title1>
+                  <img src="/src/assets/react.svg" className={styles.logo} alt="React logo" />
+                </div>
+              </CardPreview>
+              <CardHeader
+                header={<Title2>Welcome to your Power Platform Code App</Title2>}
+                description={
+                  <Body1>
+                    This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
+                    It connects to Dataverse and Office 365 services.
+                  </Body1>
+                }
+              />
+            </Card>
+
+            <Card className={styles.counterCard}>
+              <CardHeader
+                header={<Title2>Interactive Counter</Title2>}
+                description={
+                  <Body1>
+                    Test the reactivity with this simple counter example.
+                  </Body1>
+                }
+              />
+              <div style={{ padding: '16px', textAlign: 'center' }}>
+                <Button
+                  appearance="primary"
+                  size="large"
+                  onClick={() => setCount((count) => count + 1)}
+                  style={{ marginBottom: '16px' }}
+                >
+                  Count is {count}
+                </Button>
+                <br />
+                <Text size={200}>
+                  Edit <code>src/App.tsx</code> and save to test HMR
+                </Text>
+              </div>
+            </Card>
+
+            <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
+              Click on the Vite and React logos to learn more about the technologies powering this app.
+              The sidebar navigation follows Microsoft Teams design patterns for familiarity.
+            </Text>
+          </div>
+        )
+      case 'Chat':
+        return (
+          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
+            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Chat</Title2>
+            <Text size={400}>
+              Chat functionality coming soon...
+            </Text>
+          </div>
+        )
+      case 'Teams':
+        return (
+          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
+            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Teams</Title2>
+            <Text size={400}>
+              Teams collaboration features coming soon...
+            </Text>
+          </div>
+        )
+      case 'Apps':
+        return (
+          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
+            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Apps</Title2>
+            <Text size={400}>
+              Power Platform applications will be displayed here...
+            </Text>
+          </div>
+        )
+      case 'Settings':
+        return (
+          <div style={{ padding: '24px 24px 20px 24px', display: 'flex', flexDirection: 'column' }}>
+            <Title2 style={{ marginBottom: '16px', marginTop: '0' }}>Settings</Title2>
+            <Text size={400}>
+              Application settings and configuration options...
+            </Text>
+          </div>
+        )
+      default:
+        return <div>Page not found</div>
+    }
+  }
+
   return (
     <FluentProvider
       theme={isDarkTheme ? webDarkTheme : webLightTheme}
@@ -217,7 +322,7 @@ function App() {
         <div className={styles.titleBar}>
           <div style={{ display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: 0 }}>
             <img src="/src/assets/react.svg" style={{ height: '24px', width: '24px', marginLeft: '0px' }} alt="React logo" />
-            <Text size={500} weight="semibold" style={{ marginLeft: '24px' }}>Power Platform Code App using Dataverse (Fluent / Teams inspired) </Text>
+            <Text size={500} weight="semibold" style={{ marginLeft: '24px' }}>Power Platform Code App using Dataverse (Fluent UI React v9 & Teams inspired) </Text>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, marginRight: '0' }}>
@@ -294,17 +399,19 @@ function App() {
             <Button
               appearance="subtle"
               className={styles.sidebarButton}
-              title="Home"
+              title="Activity"
+              onClick={() => setCurrentPage('Activity')}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                 <Home24Regular />
-                <span style={{ fontSize: '10px' }}>Home</span>
+                <span style={{ fontSize: '10px' }}>Activity</span>
               </div>
             </Button>
             <Button
               appearance="subtle"
               className={styles.sidebarButton}
               title="Chat"
+              onClick={() => setCurrentPage('Chat')}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                 <Chat24Regular />
@@ -315,6 +422,7 @@ function App() {
               appearance="subtle"
               className={styles.sidebarButton}
               title="Teams"
+              onClick={() => setCurrentPage('Teams')}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                 <People24Regular />
@@ -325,6 +433,7 @@ function App() {
               appearance="subtle"
               className={styles.sidebarButton}
               title="Apps"
+              onClick={() => setCurrentPage('Apps')}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                 <Apps24Regular />
@@ -335,6 +444,7 @@ function App() {
               appearance="subtle"
               className={styles.sidebarButton}
               title="Settings"
+              onClick={() => setCurrentPage('Settings')}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                 <Settings24Regular />
@@ -347,62 +457,7 @@ function App() {
           <div className={styles.mainContent}>
             {/* Content Area */}
             <div className={styles.contentArea}>
-              {error && (
-                <div className={styles.errorAlert}>
-                  <Text weight="semibold">Error loading user profile</Text>
-                  <br />
-                  <Text size={200}>{error}</Text>
-                </div>
-              )}
-
-              <Card className={styles.welcomeCard}>
-                <CardPreview>
-                  <div className={styles.logoContainer}>
-                    <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
-                    <Title1>+</Title1>
-                    <img src="/src/assets/react.svg" className={styles.logo} alt="React logo" />
-                  </div>
-                </CardPreview>
-                <CardHeader
-                  header={<Title2>Welcome to your Power Platform Code App</Title2>}
-                  description={
-                    <Body1>
-                      This app is built with React + TypeScript + Vite and integrated with Microsoft's Fluent UI design system.
-                      It connects to Dataverse and Office 365 services.
-                    </Body1>
-                  }
-                />
-              </Card>
-
-              <Card className={styles.counterCard}>
-                <CardHeader
-                  header={<Title2>Interactive Counter</Title2>}
-                  description={
-                    <Body1>
-                      Test the reactivity with this simple counter example.
-                    </Body1>
-                  }
-                />
-                <div style={{ padding: '16px', textAlign: 'center' }}>
-                  <Button
-                    appearance="primary"
-                    size="large"
-                    onClick={() => setCount((count) => count + 1)}
-                    style={{ marginBottom: '16px' }}
-                  >
-                    Count is {count}
-                  </Button>
-                  <br />
-                  <Text size={200}>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                  </Text>
-                </div>
-              </Card>
-
-              <Text size={200} style={{ opacity: 0.7, textAlign: 'center', maxWidth: '600px' }}>
-                Click on the Vite and React logos to learn more about the technologies powering this app.
-                The sidebar navigation follows Microsoft Teams design patterns for familiarity.
-              </Text>
+              {renderPageContent()}
             </div>
           </div>
         </div>
