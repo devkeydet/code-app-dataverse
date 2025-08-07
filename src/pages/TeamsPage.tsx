@@ -1,4 +1,5 @@
-import { PlaceholderPage } from '../components'
+import { BasePage } from '../components'
+import { Text } from '@fluentui/react-components'
 
 interface TeamsPageProps {
     title: string
@@ -6,11 +7,14 @@ interface TeamsPageProps {
 
 const TeamsPage: React.FC<TeamsPageProps> = ({ title }) => {
     return (
-        <PlaceholderPage
+        <BasePage
             title={title}
-            message="Teams collaboration features coming soon..."
             alignment="left"
-        />
+        >
+            <Text size={400}>
+                Teams collaboration features coming soon...
+            </Text>
+        </BasePage>
     )
 }
 

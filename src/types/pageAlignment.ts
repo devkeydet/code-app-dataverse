@@ -1,4 +1,4 @@
-import type { PageAlignment } from '../pages/BasePage'
+import type { PageAlignment } from '../components/common/BasePage'
 
 export interface PageAlignmentContextType {
     alignments: Record<string, PageAlignment>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Text } from '@fluentui/react-components'
-import BasePage from './BasePage'
-import { ErrorAlert, WelcomeCard, InteractiveCounter } from '../components'
+import { BasePage, ErrorAlert, WelcomeCard, InteractiveCounter } from '../components'
 import { COMMON_STYLES } from '../constants/styles'
 
 interface HomePageProps {

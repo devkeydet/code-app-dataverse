@@ -1,4 +1,5 @@
-import { PlaceholderPage } from '../components'
+import { BasePage } from '../components'
+import { Text } from '@fluentui/react-components'
 
 interface ChatPageProps {
     title: string
@@ -6,11 +7,14 @@ interface ChatPageProps {
 
 const ChatPage: React.FC<ChatPageProps> = ({ title }) => {
     return (
-        <PlaceholderPage
+        <BasePage
             title={title}
-            message="Chat functionality coming soon..."
             alignment="center"
-        />
+        >
+            <Text size={400}>
+                Chat functionality coming soon...
+            </Text>
+        </BasePage>
     )
 }
 

@@ -1,5 +1,5 @@
 import { Title2 } from '@fluentui/react-components'
-import { STYLE_CONSTANTS, COMMON_STYLES } from '../constants/styles'
+import { STYLE_CONSTANTS, COMMON_STYLES } from '../../constants/styles'
 
 export type PageAlignment = 'center' | 'left'
 
