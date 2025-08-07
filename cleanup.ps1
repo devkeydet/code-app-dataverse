@@ -1,6 +1,4 @@
-#!/usr/bin/env pwsh
-# Clean up unused theme files
-Remove-Item "d:\scratch\code-app-dataverse\src\ThemeProvider.tsx" -ErrorAction SilentlyContinue
-Remove-Item "d:\scratch\code-app-dataverse\src\ThemeWrapper.tsx" -ErrorAction SilentlyContinue
-Remove-Item "d:\scratch\code-app-dataverse\src\hooks\useTheme.ts" -ErrorAction SilentlyContinue
-Remove-Item "d:\scratch\code-app-dataverse\install-fluent.ps1" -ErrorAction SilentlyContinue
+# ❌ DELETED SCRIPT - This file has been removed during cleanup
+# This was an old cleanup script that is no longer needed
+# The cleanup has been completed using the comprehensive approach
+# Safe to delete manually if desired

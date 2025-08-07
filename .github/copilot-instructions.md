@@ -2,11 +2,13 @@
 
 ## 🚨 CRITICAL DEVELOPMENT RESTRICTIONS
 
-### **DO NOT RUN DEVELOPMENT COMMANDS**
+### **DO NOT RUN SPECIFIC DEVELOPMENT COMMANDS**
 - **NEVER run `npm run dev`** - This command is prohibited
 - **NEVER run `pac code run`** - This command is prohibited
 - If debugging is needed, create debug pages and ask the user to paste console output
 - The user will handle running these commands manually when needed
+
+**Note**: Other terminal commands (file operations, git, cleanup scripts, etc.) are allowed and encouraged when needed.
 
 ## Architecture Overview
 
