@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HomePage, ChatPage, TeamsPage, AppsPage, SettingsPage } from './pages'
 import { TitleBar, Sidebar, UserProfile } from './components'
-import { useUserProfile, usePageAlignment } from './hooks'
+import { useUserProfile } from './hooks'
 import {
   Text,
   makeStyles,
@@ -110,22 +110,19 @@ function App() {
   const [currentPage, setCurrentPage] = useState('Home')
 
   const { user, userPhoto, loading, error } = useUserProfile()
-  const { getAlignment } = usePageAlignment()
 
   const renderPageContent = () => {
-    const alignment = getAlignment(currentPage)
-
     switch (currentPage) {
       case 'Home':
-        return <HomePage title={currentPage} error={error} count={count} setCount={setCount} alignment={alignment} />
+        return <HomePage title={currentPage} error={error} count={count} setCount={setCount} />
       case 'Chat':
-        return <ChatPage title={currentPage} alignment={alignment} />
+        return <ChatPage title={currentPage} />
       case 'Teams':
-        return <TeamsPage title={currentPage} alignment={alignment} />
+        return <TeamsPage title={currentPage} />
       case 'Apps':
-        return <AppsPage title={currentPage} alignment={alignment} />
+        return <AppsPage title={currentPage} />
       case 'Settings':
-        return <SettingsPage title={currentPage} alignment={alignment} />
+        return <SettingsPage title={currentPage} />
       default:
         return <div>Page not found</div>
     }

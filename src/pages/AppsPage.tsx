@@ -1,17 +1,15 @@
 import { PlaceholderPage } from '../components'
-import type { PageAlignment } from './BasePage'
 
 interface AppsPageProps {
     title: string
-    alignment?: PageAlignment
 }
 
-const AppsPage: React.FC<AppsPageProps> = ({ title, alignment = 'center' }) => {
+const AppsPage: React.FC<AppsPageProps> = ({ title }) => {
     return (
         <PlaceholderPage
             title={title}
             message="Power Platform applications will be displayed here..."
-            alignment={alignment}
+            alignment="left"
         />
     )
 }

@@ -1,17 +1,15 @@
 import { PlaceholderPage } from '../components'
-import type { PageAlignment } from './BasePage'
 
 interface ChatPageProps {
     title: string
-    alignment?: PageAlignment
 }
 
-const ChatPage: React.FC<ChatPageProps> = ({ title, alignment = 'center' }) => {
+const ChatPage: React.FC<ChatPageProps> = ({ title }) => {
     return (
         <PlaceholderPage
             title={title}
             message="Chat functionality coming soon..."
-            alignment={alignment}
+            alignment="center"
         />
     )
 }

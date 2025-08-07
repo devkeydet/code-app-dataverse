@@ -1,6 +1,5 @@
 import { Title2 } from '@fluentui/react-components'
 import { STYLE_CONSTANTS, COMMON_STYLES } from '../constants/styles'
-import { AlignmentToggle } from '../components'
 
 export type PageAlignment = 'center' | 'left'
 
@@ -8,14 +7,12 @@ interface BasePageProps {
     title: string
     children: React.ReactNode
     alignment?: PageAlignment
-    showAlignmentToggle?: boolean
 }
 
 const BasePage: React.FC<BasePageProps> = ({
     title,
     children,
-    alignment = 'center',
-    showAlignmentToggle = true
+    alignment = 'center'
 }) => {
     const contentStyle: React.CSSProperties = {
         display: 'flex',
@@ -40,10 +37,6 @@ const BasePage: React.FC<BasePageProps> = ({
             <Title2 style={{ ...COMMON_STYLES.pageTitle, textAlign: 'left' }}>
                 {title}
             </Title2>
-
-            {showAlignmentToggle && (
-                <AlignmentToggle pageKey={title} />
-            )}
 
             <div style={contentStyle}>
                 {children}

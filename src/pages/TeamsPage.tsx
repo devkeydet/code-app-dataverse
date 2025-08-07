@@ -1,17 +1,15 @@
 import { PlaceholderPage } from '../components'
-import type { PageAlignment } from './BasePage'
 
 interface TeamsPageProps {
     title: string
-    alignment?: PageAlignment
 }
 
-const TeamsPage: React.FC<TeamsPageProps> = ({ title, alignment = 'center' }) => {
+const TeamsPage: React.FC<TeamsPageProps> = ({ title }) => {
     return (
         <PlaceholderPage
             title={title}
             message="Teams collaboration features coming soon..."
-            alignment={alignment}
+            alignment="left"
         />
     )
 }
