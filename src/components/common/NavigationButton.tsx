@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '@fluentui/react-components'
+import { tokens } from '@fluentui/react-components'
 
 interface NavigationButtonProps {
     icon: React.ReactElement
@@ -16,23 +16,59 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
     className,
     isActive = false
 }) => {
+    // Teams-style design: blue vertical line + blue icon/text for selected state
+    const containerStyle: React.CSSProperties = {
+        position: 'relative',
+        width: '100%',
+        height: '60px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        backgroundColor: 'transparent', // No background change - Teams style
+        color: isActive ? tokens.colorBrandForeground1 : tokens.colorNeutralForeground1,
+        border: 'none',
+        borderRadius: '0',
+        padding: '8px 4px',
+        gap: '2px',
+        transition: 'all 0.2s ease',
+    }
+
+    // Blue vertical line overlay for selected state
+    const blueLineStyle: React.CSSProperties = {
+        position: 'absolute',
+        left: '0',
+        top: '0',
+        bottom: '0',
+        width: '3px',
+        backgroundColor: tokens.colorBrandBackground,
+        display: isActive ? 'block' : 'none',
+    }
+
     return (
-        <Button
-            appearance={isActive ? "primary" : "subtle"}
+        <button
             className={className}
             title={label}
             onClick={onClick}
+            style={containerStyle}
         >
+            {/* Blue vertical line overlay for selected state */}
+            <div style={blueLineStyle}></div>
+
             <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '2px'
+                color: isActive ? tokens.colorBrandForeground1 : tokens.colorNeutralForeground1
             }}>
                 {icon}
-                <span style={{ fontSize: '10px' }}>{label}</span>
             </div>
-        </Button>
+            <span style={{
+                fontSize: '10px',
+                color: isActive ? tokens.colorBrandForeground1 : tokens.colorNeutralForeground1,
+                fontWeight: isActive ? '600' : '400'
+            }}>
+                {label}
+            </span>
+        </button>
     )
 }
 
