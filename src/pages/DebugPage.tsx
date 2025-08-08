@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Title2, Body1, Spinner, tokens } from '@fluentui/react-components'
 import { contactsService } from '../Services/contactsService'
+import { Office365UsersService } from '../Services/Office365UsersService'
+import { dataSourcesInfo } from '../../.power/appschemas/dataSourcesInfo'
 
 function toPlainError(err: unknown) {
   if (err instanceof Error) {
@@ -27,6 +29,8 @@ const DebugPage: React.FC = () => {
   const [resultJson, setResultJson] = useState<string>('')
   const invocation = 'contactsService.getAll()'
   const [lastRunAt, setLastRunAt] = useState<string>('')
+  const [runtimeInfoJson, setRuntimeInfoJson] = useState<string>('')
+  const [o365Json, setO365Json] = useState<string>('')
 
   const run = async () => {
     setLoading(true)
@@ -46,6 +50,24 @@ const DebugPage: React.FC = () => {
   useEffect(() => {
     // Auto run once on mount
     run()
+    // Also surface runtime hydration info and a connector sanity check
+    // Augment window typing locally
+    const envId = (globalThis as { POWERAPPS_ENVIRONMENT_ID?: string }).POWERAPPS_ENVIRONMENT_ID ?? null
+    const runtime = {
+      environmentId: envId,
+      dataSourcesKnown: Object.keys(dataSourcesInfo ?? {}),
+      contactsMeta: 'contacts' in dataSourcesInfo ? (dataSourcesInfo as { contacts: unknown }).contacts : null,
+      accountsMeta: 'accounts' in dataSourcesInfo ? (dataSourcesInfo as { accounts: unknown }).accounts : null,
+    }
+    setRuntimeInfoJson(stringify(runtime))
+      ; (async () => {
+        try {
+          const profile = await Office365UsersService.MyProfile()
+          setO365Json(stringify(profile))
+        } catch (err) {
+          setO365Json(stringify({ success: false, error: toPlainError(err) }))
+        }
+      })()
   }, [])
 
   const header = useMemo(
@@ -81,6 +103,21 @@ const DebugPage: React.FC = () => {
         </Body1>
 
         <div>
+          <Title2>Runtime Status</Title2>
+          <pre style={{
+            background: tokens.colorNeutralBackground2,
+            border: `1px solid ${tokens.colorNeutralStroke2}`,
+            borderRadius: 6,
+            padding: 12,
+            marginTop: 8,
+            overflow: 'auto',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            maxHeight: '30vh'
+          }}>{runtimeInfoJson || 'Loading…'}</pre>
+        </div>
+
+        <div>
           <Title2>Calling</Title2>
           <pre style={{
             background: tokens.colorNeutralBackground2,
@@ -113,6 +150,21 @@ await ${invocation};`}
             wordBreak: 'break-word',
             maxHeight: '50vh'
           }}>{resultJson || (loading ? 'Loading…' : 'No result yet')}</pre>
+        </div>
+
+        <div>
+          <Title2>Office 365 Connector Check</Title2>
+          <pre style={{
+            background: tokens.colorNeutralBackground2,
+            border: `1px solid ${tokens.colorNeutralStroke2}`,
+            borderRadius: 6,
+            padding: 12,
+            marginTop: 8,
+            overflow: 'auto',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            maxHeight: '40vh'
+          }}>{o365Json || 'Loading…'}</pre>
         </div>
       </div>
     </div>
