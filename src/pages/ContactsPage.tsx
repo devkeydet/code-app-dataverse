@@ -42,6 +42,7 @@ import { contactsService } from '../Services/contactsService';
 import type { contacts } from '../Models/contactsModel';
 import { dataSourcesInfo } from '../../.power/appschemas/dataSourcesInfo';
 import BasePage from '../components/common/BasePage';
+import { usePowerRuntime } from '../hooks/usePowerRuntime';
 
 const useStyles = makeStyles({
   searchContainer: {
@@ -89,6 +90,7 @@ const emptyContact: ContactFormData = {
 
 export const ContactsPage: React.FC = () => {
   const styles = useStyles();
+  const { isReady } = usePowerRuntime();
   const [contacts, setContacts] = useState<contacts[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<contacts[]>([]);
   const [loading, setLoading] = useState(true);
@@ -105,9 +107,10 @@ export const ContactsPage: React.FC = () => {
 
   // Load contacts on component mount
   useEffect(() => {
+    if (!isReady) return;
     loadContacts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isReady]);
 
   // Filter contacts based on search term
   useEffect(() => {
@@ -465,14 +468,18 @@ export const ContactsPage: React.FC = () => {
             onChange={(_, data) => setSearchTerm(data.value)}
             contentBefore={<SearchRegular />}
           />
-          <Button onClick={loadContacts} disabled={loading}>
+          <Button onClick={loadContacts} disabled={loading || !isReady}>
             Refresh
           </Button>
         </div>
       </Card>
 
       {/* Contacts Table */}
-      {loading ? (
+      {!isReady ? (
+        <div className={styles.loadingContainer}>
+          <Spinner label="Initializing Power runtime..." />
+        </div>
+      ) : loading ? (
         <div className={styles.loadingContainer}>
           <Spinner label="Loading contacts..." />
         </div>

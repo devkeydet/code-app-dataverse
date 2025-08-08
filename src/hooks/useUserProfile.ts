@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Office365UsersService } from '../Services/Office365UsersService'
 import type { GraphUser_V1 } from '../Models/Office365UsersModel'
+import { usePowerRuntime } from './usePowerRuntime'
 
 interface UseUserProfileReturn {
     user: GraphUser_V1 | null
@@ -15,7 +16,10 @@ export const useUserProfile = (): UseUserProfileReturn => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
+    const { isReady } = usePowerRuntime()
+
     useEffect(() => {
+        if (!isReady) return
         const loadUserProfile = async () => {
             try {
                 console.log('Starting to load user profile...')
@@ -53,7 +57,7 @@ export const useUserProfile = (): UseUserProfileReturn => {
         }
 
         loadUserProfile()
-    }, [])
+    }, [isReady])
 
     return { user, userPhoto, loading, error }
 }

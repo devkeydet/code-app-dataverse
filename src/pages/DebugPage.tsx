@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Button, Title2, Body1, Spinner, tokens } from '@fluentui/react-components'
+import React, { useEffect, useMemo, useState } from 'react' 
+import { Button, Title2, Body1, Spinner, tokens, MessageBar, MessageBarBody, DataGrid, DataGridHeader, DataGridRow, DataGridHeaderCell, DataGridBody, DataGridCell, createTableColumn, type TableColumnDefinition } from '@fluentui/react-components'
 import { contactsService } from '../Services/contactsService'
 import { Office365UsersService } from '../Services/Office365UsersService'
 import { dataSourcesInfo } from '../../.power/appschemas/dataSourcesInfo'
+import { usePowerRuntime } from '../hooks/usePowerRuntime'
+import type { contacts as Contact } from '../Models/contactsModel'
 
 function toPlainError(err: unknown) {
   if (err instanceof Error) {
@@ -27,20 +29,37 @@ function stringify(value: unknown) {
 const DebugPage: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [resultJson, setResultJson] = useState<string>('')
-  const invocation = 'contactsService.getAll()'
+  const invocation = 'contactsService.getAll({ select: ["contactid","fullname","emailaddress1","jobtitle"], orderBy: ["fullname asc"], top: 50 })'
   const [lastRunAt, setLastRunAt] = useState<string>('')
   const [runtimeInfoJson, setRuntimeInfoJson] = useState<string>('')
   const [o365Json, setO365Json] = useState<string>('')
+  const { isReady, error: initError, initializedAt } = usePowerRuntime()
+  const [contacts, setContacts] = useState<Contact[]>([])
+  const [contactsError, setContactsError] = useState<string | null>(null)
 
   const run = async () => {
     setLoading(true)
+    setContactsError(null)
     setResultJson('')
     setLastRunAt(new Date().toLocaleString())
     try {
-      // Keep it minimal: no options, call exactly what we want to validate
-      const result = await contactsService.getAll()
+      const result = await contactsService.getAll({
+        select: ['contactid', 'fullname', 'emailaddress1', 'jobtitle'],
+        orderBy: ['fullname asc'],
+        top: 50,
+      })
       setResultJson(stringify(result))
+      if (result?.success) {
+        const value: Contact[] = (result.data as unknown as Contact[]) ?? []
+        setContacts(value)
+      } else {
+        const message = (result?.error && (result.error as unknown as Error).message) || (typeof result?.error === 'string' ? result.error : 'Failed to load contacts')
+        setContacts([])
+        setContactsError(message)
+      }
     } catch (err) {
+      setContacts([])
+      setContactsError(err instanceof Error ? err.message : 'Failed to load contacts')
       setResultJson(stringify({ success: false, error: toPlainError(err) }))
     } finally {
       setLoading(false)
@@ -48,7 +67,8 @@ const DebugPage: React.FC = () => {
   }
 
   useEffect(() => {
-    // Auto run once on mount
+    if (!isReady) return
+    // Auto run once when runtime is ready
     run()
     // Also surface runtime hydration info and a connector sanity check
     // Augment window typing locally
@@ -68,7 +88,7 @@ const DebugPage: React.FC = () => {
           setO365Json(stringify({ success: false, error: toPlainError(err) }))
         }
       })()
-  }, [])
+  }, [isReady])
 
   const header = useMemo(
     () => (
@@ -94,10 +114,39 @@ const DebugPage: React.FC = () => {
     [loading]
   )
 
+  const columns = useMemo<TableColumnDefinition<Contact>[]>(
+    () => [
+      createTableColumn<Contact>({
+        columnId: 'fullname',
+        renderHeaderCell: () => 'Full Name',
+        renderCell: (item) => item.fullname ?? '',
+        compare: (a, b) => (a.fullname ?? '').localeCompare(b.fullname ?? ''),
+      }),
+      createTableColumn<Contact>({
+        columnId: 'email',
+        renderHeaderCell: () => 'Email',
+        renderCell: (item) => item.emailaddress1 ?? '',
+        compare: (a, b) => (a.emailaddress1 ?? '').localeCompare(b.emailaddress1 ?? ''),
+      }),
+      createTableColumn<Contact>({
+        columnId: 'jobtitle',
+        renderHeaderCell: () => 'Job Title',
+        renderCell: (item) => item.jobtitle ?? '',
+        compare: (a, b) => (a.jobtitle ?? '').localeCompare(b.jobtitle ?? ''),
+      }),
+    ],
+    []
+  )
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'auto' }}>
       {header}
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {!isReady && (
+          <Body1>
+            Power runtime not initialized yet{initializedAt ? ` (last: ${initializedAt})` : ''}{initError ? `: ${initError}` : '…'}
+          </Body1>
+        )}
         <Body1>
           This page invokes the generated service to help diagnose Dataverse connectivity.
         </Body1>
@@ -134,6 +183,49 @@ await ${invocation};`}
             <Body1 style={{ marginTop: 8, color: tokens.colorNeutralForeground2 }}>
               Last run: {lastRunAt}
             </Body1>
+          )}
+        </div>
+
+        <div>
+          <Title2>Contacts Preview</Title2>
+          {loading && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Spinner size="tiny" /> <Body1>Loading contacts…</Body1>
+            </div>
+          )}
+          {!loading && contactsError && (
+            <MessageBar intent="error"><MessageBarBody>{contactsError}</MessageBarBody></MessageBar>
+          )}
+          {!loading && !contactsError && contacts.length === 0 && (
+            <MessageBar intent="info"><MessageBarBody>No contacts found.</MessageBarBody></MessageBar>
+          )}
+          {!loading && !contactsError && contacts.length > 0 && (
+            <div style={{ border: `1px solid ${tokens.colorNeutralStroke2}`, borderRadius: 6, overflow: 'hidden' }}>
+              <DataGrid
+                items={contacts}
+                columns={columns}
+                sortable
+                getRowId={(c: Contact) => c.contactid ?? crypto.randomUUID()}
+                aria-label="Contacts data grid"
+              >
+                <DataGridHeader>
+                  <DataGridRow>
+                    {({ renderHeaderCell }) => (
+                      <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                    )}
+                  </DataGridRow>
+                </DataGridHeader>
+                <DataGridBody<Contact>>
+                  {({ item, rowId }) => (
+                    <DataGridRow<Contact> key={rowId}>
+                      {({ renderCell }) => (
+                        <DataGridCell>{renderCell(item)}</DataGridCell>
+                      )}
+                    </DataGridRow>
+                  )}
+                </DataGridBody>
+              </DataGrid>
+            </div>
           )}
         </div>
 
