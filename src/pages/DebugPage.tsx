@@ -39,9 +39,24 @@ const DebugPage: React.FC = () => {
     try {
       // Keep it minimal: no options, call exactly what we want to validate
       const result = await contactsService.getAll()
-      setResultJson(stringify(result))
+      
+      // Check if the operation was successful
+      if (result.success && result.data) {
+        setResultJson(stringify({
+          success: true,
+          data: result.data,
+          recordCount: Array.isArray(result.data) ? result.data.length : 0,
+          skipToken: result.skipToken
+        }))
+      } else {
+        setResultJson(stringify({
+          success: false,
+          error: result.error ? toPlainError(result.error) : 'Unknown error - no error details provided',
+          rawResult: result
+        }))
+      }
     } catch (err) {
-      setResultJson(stringify({ success: false, error: toPlainError(err) }))
+      setResultJson(stringify({ success: false, error: toPlainError(err), caughtException: true }))
     } finally {
       setLoading(false)
     }
@@ -63,9 +78,22 @@ const DebugPage: React.FC = () => {
       ; (async () => {
         try {
           const profile = await Office365UsersService.MyProfile()
-          setO365Json(stringify(profile))
+          if (profile.success && profile.data) {
+            setO365Json(stringify({
+              success: true,
+              data: profile.data,
+              connectorWorking: true
+            }))
+          } else {
+            setO365Json(stringify({
+              success: false,
+              error: profile.error ? toPlainError(profile.error) : 'Unknown error - no error details provided',
+              connectorWorking: false,
+              rawResult: profile
+            }))
+          }
         } catch (err) {
-          setO365Json(stringify({ success: false, error: toPlainError(err) }))
+          setO365Json(stringify({ success: false, error: toPlainError(err), caughtException: true }))
         }
       })()
   }, [])
@@ -128,7 +156,13 @@ const DebugPage: React.FC = () => {
             overflowX: 'auto'
           }}>
             {`import { contactsService } from "../Services/contactsService";
-await ${invocation};`}
+const result = await ${invocation};
+// Fixed: Now properly checking result.success
+if (result.success && result.data) {
+  console.log('Data:', result.data);
+} else {
+  console.error('Error:', result.error);
+}`}
           </pre>
           {lastRunAt && (
             <Body1 style={{ marginTop: 8, color: tokens.colorNeutralForeground2 }}>
