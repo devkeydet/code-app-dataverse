@@ -6,8 +6,7 @@ import {
     Chat24Regular,
     People24Regular,
     Apps24Regular,
-    Settings24Regular,
-    Bug24Regular
+    Settings24Regular
 } from '@fluentui/react-icons'
 
 interface SidebarProps {
@@ -26,7 +25,6 @@ const mainNavigationItems = [
 ]
 
 const bottomNavigationItems = [
-    { key: 'Debug', icon: <Bug24Regular />, label: 'Debug' },
     { key: 'Settings', icon: <Settings24Regular />, label: 'Settings' }
 ]
 

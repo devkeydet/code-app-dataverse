@@ -1,4 +1,5 @@
-import type { PageAlignment } from '../components/common/BasePage'
+// Define PageAlignment type locally since it's no longer in BasePage
+export type PageAlignment = 'left' | 'center' | 'right'
 
 export interface PageAlignmentContextType {
     alignments: Record<string, PageAlignment>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
-import type { PageAlignment } from '../components/common/BasePage'
-import type { PageAlignmentContextType } from '../types/pageAlignment'
+import type { PageAlignment, PageAlignmentContextType } from '../types/pageAlignment'
 import { PageAlignmentContext } from './pageAlignmentContext'
 
 interface PageAlignmentProviderProps {

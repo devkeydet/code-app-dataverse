@@ -1,16 +1,15 @@
 import { BasePage } from '../components'
-import { Text } from '@fluentui/react-components'
+import { Text, Title1 } from '@fluentui/react-components'
 
 interface ChatPageProps {
     title: string
 }
 
 const ChatPage: React.FC<ChatPageProps> = ({ title }) => {
+    const header = <Title1>{title}</Title1>;
+
     return (
-        <BasePage
-            title={title}
-            alignment="center"
-        >
+        <BasePage header={header}>
             <Text size={400}>
                 Chat functionality coming soon...
             </Text>
