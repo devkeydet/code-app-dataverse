@@ -7,12 +7,16 @@ interface BasePageProps {
     title: string
     children: React.ReactNode
     alignment?: PageAlignment
+    headerContent?: React.ReactNode
+    contentNoPadding?: boolean // New prop to remove content padding for perfect alignment
 }
 
 const BasePage: React.FC<BasePageProps> = ({
     title,
     children,
-    alignment = 'center'
+    alignment = 'center',
+    headerContent,
+    contentNoPadding = false
 }) => {
     const contentStyle: React.CSSProperties = {
         display: 'flex',
@@ -21,7 +25,9 @@ const BasePage: React.FC<BasePageProps> = ({
         justifyContent: 'flex-start', // Always top-aligned, never vertically centered
         width: '100%',
         gap: '24px', // Add spacing between content items
-        padding: STYLE_CONSTANTS.LAYOUT.PAGE_PADDING,
+        // Use contentNoPadding to perfectly align with header when needed
+        padding: contentNoPadding ? STYLE_CONSTANTS.LAYOUT.PAGE_PADDING :
+            (headerContent ? '0 24px 20px 24px' : STYLE_CONSTANTS.LAYOUT.PAGE_PADDING),
         paddingTop: '0', // Remove top padding since title has its own padding
         overflowY: 'auto', // Allow vertical content to scroll
         overflowX: 'hidden', // Prevent horizontal scroll
@@ -51,6 +57,13 @@ const BasePage: React.FC<BasePageProps> = ({
                 <Title2 style={{ ...COMMON_STYLES.pageTitle, textAlign: 'left', marginBottom: 0 }}>
                     {title}
                 </Title2>
+                {headerContent && (
+                    <div style={{
+                        marginTop: '12px'
+                    }}>
+                        {headerContent}
+                    </div>
+                )}
             </div>
 
             {/* Scrollable Content Area */}

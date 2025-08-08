@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { HomePage, ContactsPage, ChatPage, TeamsPage, AppsPage, SettingsPage, DebugPage } from './pages'
+import { HomePage, ChatPage, TeamsPage, AppsPage, SettingsPage, DebugPage } from './pages'
+import ContactsPageNew from './pages/ContactsPageNew'
 import { TitleBar, Sidebar, UserProfile } from './components'
 import { useUserProfile } from './hooks'
 import {
@@ -140,7 +141,7 @@ function App() {
       case 'Home':
         return <HomePage title={currentPage} error={error} count={count} setCount={setCount} />
       case 'Contacts':
-        return <ContactsPage />
+        return <ContactsPageNew />
       case 'Chat':
         return <ChatPage title={currentPage} />
       case 'Teams':

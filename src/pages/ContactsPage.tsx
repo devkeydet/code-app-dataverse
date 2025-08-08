@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Button,
   Input,
@@ -10,12 +10,14 @@ import {
   DialogBody,
   DialogActions,
   Field,
-  Table,
-  TableHeader,
-  TableHeaderCell,
-  TableBody,
-  TableRow,
-  TableCell,
+  DataGrid,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridBody,
+  DataGridRow,
+  DataGridCell,
+  createTableColumn,
+  type TableColumnDefinition,
   MenuButton,
   Menu,
   MenuList,
@@ -25,8 +27,6 @@ import {
   MessageBarBody,
   Spinner,
   SearchBox,
-  Card,
-  CardHeader,
   Text,
   makeStyles,
   tokens,
@@ -37,6 +37,7 @@ import {
   DeleteRegular,
   MoreHorizontalRegular,
   SearchRegular,
+  ArrowClockwiseRegular,
 } from '@fluentui/react-icons';
 import { contactsService } from '../Services/contactsService';
 import type { contacts } from '../Models/contactsModel';
@@ -45,16 +46,21 @@ import BasePage from '../components/common/BasePage';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 
 const useStyles = makeStyles({
+  toolbarRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    gap: tokens.spacingHorizontalM,
+  },
   searchContainer: {
-    marginBottom: tokens.spacingVerticalM,
     display: 'flex',
     gap: tokens.spacingHorizontalM,
     alignItems: 'center',
   },
-  tableContainer: {
-    overflowX: 'auto',
+  gridContainer: {
     border: `1px solid ${tokens.colorNeutralStroke2}`,
     borderRadius: tokens.borderRadiusMedium,
+    overflow: 'hidden',
   },
   actionButton: {
     minWidth: 'auto',
@@ -178,7 +184,7 @@ export const ContactsPage: React.FC = () => {
     }
   ];
 
-  const loadContacts = async () => {
+  const loadContacts = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -217,7 +223,7 @@ export const ContactsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleCreate = async () => {
     try {
@@ -325,7 +331,7 @@ export const ContactsPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (contact: contacts) => {
+  const handleDelete = useCallback(async (contact: contacts) => {
     if (!confirm(`Are you sure you want to delete ${contact.fullname}?`)) {
       return;
     }
@@ -347,14 +353,14 @@ export const ContactsPage: React.FC = () => {
     } catch (err) {
       setError('Failed to delete contact: ' + (err as Error).message);
     }
-  };
+  }, [loadContacts]);
 
   const openCreateDialog = () => {
     setFormData(emptyContact);
     setIsCreateDialogOpen(true);
   };
 
-  const openEditDialog = (contact: contacts) => {
+  const openEditDialog = useCallback((contact: contacts) => {
     setEditingContact(contact);
     setFormData({
       firstname: contact.firstname || '',
@@ -364,12 +370,73 @@ export const ContactsPage: React.FC = () => {
       jobtitle: contact.jobtitle || '',
     });
     setIsEditDialogOpen(true);
-  };
+  }, []);
 
   const clearMessages = () => {
     setError(null);
     setSuccess(null);
   };
+
+  // Define columns for DataGrid - exactly like DebugPage
+  const columns = useMemo<TableColumnDefinition<contacts>[]>(
+    () => [
+      createTableColumn<contacts>({
+        columnId: 'fullname',
+        renderHeaderCell: () => 'Name',
+        renderCell: (item) => item.fullname || `${item.firstname} ${item.lastname}`,
+        compare: (a, b) => (a.fullname || `${a.firstname} ${a.lastname}`).localeCompare(b.fullname || `${b.firstname} ${b.lastname}`),
+      }),
+      createTableColumn<contacts>({
+        columnId: 'email',
+        renderHeaderCell: () => 'Email',
+        renderCell: (item) => item.emailaddress1 || '-',
+        compare: (a, b) => (a.emailaddress1 || '').localeCompare(b.emailaddress1 || ''),
+      }),
+      createTableColumn<contacts>({
+        columnId: 'phone',
+        renderHeaderCell: () => 'Phone',
+        renderCell: (item) => item.telephone1 || '-',
+        compare: (a, b) => (a.telephone1 || '').localeCompare(b.telephone1 || ''),
+      }),
+      createTableColumn<contacts>({
+        columnId: 'jobtitle',
+        renderHeaderCell: () => 'Job Title',
+        renderCell: (item) => item.jobtitle || '-',
+        compare: (a, b) => (a.jobtitle || '').localeCompare(b.jobtitle || ''),
+      }),
+      createTableColumn<contacts>({
+        columnId: 'actions',
+        renderHeaderCell: () => 'Actions',
+        renderCell: (item) => (
+          <Menu>
+            <MenuTrigger>
+              <MenuButton
+                appearance="subtle"
+                icon={<MoreHorizontalRegular />}
+                className={styles.actionButton}
+                aria-label="Contact actions"
+              />
+            </MenuTrigger>
+            <MenuList>
+              <MenuItem
+                icon={<EditRegular />}
+                onClick={() => openEditDialog(item)}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem
+                icon={<DeleteRegular />}
+                onClick={() => handleDelete(item)}
+              >
+                Delete
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        ),
+      }),
+    ],
+    [styles.actionButton, handleDelete, openEditDialog]
+  );
 
   const ContactForm = () => (
     <>
@@ -413,8 +480,37 @@ export const ContactsPage: React.FC = () => {
     </>
   );
 
+  const header = (
+    <div className={styles.toolbarRow}>
+      <div className={styles.searchContainer}>
+        <SearchBox
+          placeholder="Search contacts..."
+          value={searchTerm}
+          onChange={(_, data) => setSearchTerm(data.value)}
+          contentBefore={<SearchRegular />}
+          style={{ width: '450px', maxWidth: '100%' }}
+        />
+        <Button
+          onClick={loadContacts}
+          disabled={loading || !isReady}
+          icon={<ArrowClockwiseRegular />}
+          aria-label="Refresh"
+          title="Refresh"
+          appearance="subtle"
+        />
+      </div>
+      <Button
+        appearance="primary"
+        icon={<AddRegular />}
+        onClick={openCreateDialog}
+      >
+        New Contact
+      </Button>
+    </div>
+  )
+
   return (
-    <BasePage title="Contacts">
+    <BasePage title="Contacts" alignment="left" headerContent={header}>
       {/* Messages */}
       {error && (
         <MessageBar intent="error">
@@ -447,33 +543,6 @@ export const ContactsPage: React.FC = () => {
         </MessageBar>
       )}
 
-      {/* Search and Actions */}
-      <Card>
-        <CardHeader
-          header={<Text weight="semibold">Manage Contacts</Text>}
-          action={
-            <Button
-              appearance="primary"
-              icon={<AddRegular />}
-              onClick={openCreateDialog}
-            >
-              New Contact
-            </Button>
-          }
-        />
-        <div className={styles.searchContainer}>
-          <SearchBox
-            placeholder="Search contacts..."
-            value={searchTerm}
-            onChange={(_, data) => setSearchTerm(data.value)}
-            contentBefore={<SearchRegular />}
-          />
-          <Button onClick={loadContacts} disabled={loading || !isReady}>
-            Refresh
-          </Button>
-        </div>
-      </Card>
-
       {/* Contacts Table */}
       {!isReady ? (
         <div className={styles.loadingContainer}>
@@ -490,58 +559,39 @@ export const ContactsPage: React.FC = () => {
           </Text>
         </div>
       ) : (
-        <div className={styles.tableContainer}>
-          <Table arial-label="Contacts table">
-            <TableHeader>
-              <TableRow>
-                <TableHeaderCell>Name</TableHeaderCell>
-                <TableHeaderCell>Email</TableHeaderCell>
-                <TableHeaderCell>Phone</TableHeaderCell>
-                <TableHeaderCell>Job Title</TableHeaderCell>
-                <TableHeaderCell>Actions</TableHeaderCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredContacts.map((contact) => (
-                <TableRow key={contact.contactid}>
-                  <TableCell>{contact.fullname || `${contact.firstname} ${contact.lastname}`}</TableCell>
-                  <TableCell>{contact.emailaddress1 || '-'}</TableCell>
-                  <TableCell>{contact.telephone1 || '-'}</TableCell>
-                  <TableCell>{contact.jobtitle || '-'}</TableCell>
-                  <TableCell>
-                    <Menu>
-                      <MenuTrigger>
-                        <MenuButton
-                          appearance="subtle"
-                          icon={<MoreHorizontalRegular />}
-                          className={styles.actionButton}
-                          aria-label="Contact actions"
-                        />
-                      </MenuTrigger>
-                      <MenuList>
-                        <MenuItem
-                          icon={<EditRegular />}
-                          onClick={() => openEditDialog(contact)}
-                        >
-                          Edit
-                        </MenuItem>
-                        <MenuItem
-                          icon={<DeleteRegular />}
-                          onClick={() => handleDelete(contact)}
-                        >
-                          Delete
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        <div className={styles.gridContainer}>
+          <DataGrid
+            items={filteredContacts}
+            columns={columns}
+            sortable
+            getRowId={(contact: contacts) => contact.contactid ?? crypto.randomUUID()}
+            aria-label="Contacts data grid"
+            style={{
+              width: '100%',
+              minWidth: '100%',
+              display: 'table',
+              tableLayout: 'fixed'
+            }}
+          >
+            <DataGridHeader>
+              <DataGridRow>
+                {({ renderHeaderCell }) => (
+                  <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                )}
+              </DataGridRow>
+            </DataGridHeader>
+            <DataGridBody<contacts>>
+              {({ item, rowId }) => (
+                <DataGridRow<contacts> key={rowId}>
+                  {({ renderCell }) => (
+                    <DataGridCell>{renderCell(item)}</DataGridCell>
+                  )}
+                </DataGridRow>
+              )}
+            </DataGridBody>
+          </DataGrid>
         </div>
-      )}
-
-      {/* Create Contact Dialog */}
+      )}      {/* Create Contact Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={(_, data) => setIsCreateDialogOpen(data.open)}>
         <DialogSurface>
           <DialogBody>
