@@ -2,6 +2,8 @@ import React from 'react'
 import { Button, Text } from '@fluentui/react-components'
 import { WeatherSunny24Regular, WeatherMoon24Regular } from '@fluentui/react-icons'
 import { COMMON_STYLES, STYLE_CONSTANTS } from '../../constants/styles'
+// Import assets through Vite so URLs are resolved correctly under HTTPS wrappers
+import reactLogo from '../../assets/react.svg'
 
 interface TitleBarProps {
     isDarkTheme: boolean
@@ -19,11 +21,7 @@ const TitleBar: React.FC<TitleBarProps> = ({
     return (
         <div className={className}>
             <div style={COMMON_STYLES.centeredRow}>
-                <img
-                    src="/src/assets/react.svg"
-                    style={COMMON_STYLES.icon}
-                    alt="React logo"
-                />
+                <img src={reactLogo} style={COMMON_STYLES.icon} alt="React logo" />
                 <Text
                     size={500}
                     weight="semibold"

@@ -1,6 +1,8 @@
 import { CardHeader, CardPreview, Title1, Title2, Body1 } from '@fluentui/react-components'
 import CommonCard from './CommonCard'
 import { STYLE_CONSTANTS, COMMON_STYLES } from '../../constants/styles'
+import reactLogo from '../../assets/react.svg'
+import viteLogo from '/vite.svg'
 
 interface AboutCardProps {
     style?: React.CSSProperties
@@ -17,9 +19,9 @@ const AboutCard: React.FC<AboutCardProps> = ({ style }) => {
                     justifyContent: 'center',
                     padding: STYLE_CONSTANTS.SPACING.LG
                 }}>
-                    <img src="/vite.svg" style={{ height: '6em' }} alt="Vite logo" />
+                    <img src={viteLogo} style={{ height: '6em' }} alt="Vite logo" />
                     <Title1>+</Title1>
-                    <img src="/src/assets/react.svg" style={{ height: '6em' }} alt="React logo" />
+                    <img src={reactLogo} style={{ height: '6em' }} alt="React logo" />
                 </div>
             </CardPreview>
             <CardHeader
