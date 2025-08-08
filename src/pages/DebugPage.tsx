@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react' 
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Title2, Body1, Spinner, tokens, MessageBar, MessageBarBody, DataGrid, DataGridHeader, DataGridRow, DataGridHeaderCell, DataGridBody, DataGridCell, createTableColumn, type TableColumnDefinition } from '@fluentui/react-components'
 import { contactsService } from '../Services/contactsService'
 import { Office365UsersService } from '../Services/Office365UsersService'
