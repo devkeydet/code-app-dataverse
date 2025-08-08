@@ -156,7 +156,13 @@ const DebugPage: React.FC = () => {
             overflowX: 'auto'
           }}>
             {`import { contactsService } from "../Services/contactsService";
-await ${invocation};`}
+const result = await ${invocation};
+// Fixed: Now properly checking result.success
+if (result.success && result.data) {
+  console.log('Data:', result.data);
+} else {
+  console.error('Error:', result.error);
+}`}
           </pre>
           {lastRunAt && (
             <Body1 style={{ marginTop: 8, color: tokens.colorNeutralForeground2 }}>
