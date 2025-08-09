@@ -3,6 +3,7 @@ import NavigationButton from '../common/NavigationButton'
 import {
     Home24Regular,
     ContactCard24Regular,
+    Building24Regular,
     Chat24Regular,
     People24Regular,
     Apps24Regular,
@@ -19,6 +20,7 @@ interface SidebarProps {
 const mainNavigationItems = [
     { key: 'Home', icon: <Home24Regular />, label: 'Home' },
     { key: 'Contacts', icon: <ContactCard24Regular />, label: 'Contacts' },
+    { key: 'Accounts', icon: <Building24Regular />, label: 'Accounts' },
     { key: 'Chat', icon: <Chat24Regular />, label: 'Chat' },
     { key: 'Teams', icon: <People24Regular />, label: 'Teams' },
     { key: 'Apps', icon: <Apps24Regular />, label: 'Apps' }

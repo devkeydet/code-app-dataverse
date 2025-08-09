@@ -18,10 +18,6 @@ import {
   DataGridCell,
   createTableColumn,
   type TableColumnDefinition,
-  MenuButton,
-  Menu,
-  MenuList,
-  MenuItem,
   MessageBar,
   MessageBarBody,
   Spinner,
@@ -35,7 +31,6 @@ import {
   AddRegular,
   EditRegular,
   DeleteRegular,
-  MoreHorizontalRegular,
   SearchRegular,
   ArrowClockwiseRegular,
 } from '@fluentui/react-icons';
@@ -94,6 +89,24 @@ const useStyles = makeStyles({
     textAlign: 'center',
     padding: tokens.spacingVerticalXXL,
     color: tokens.colorNeutralForeground3,
+  },
+  dialogForm: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalM,
+    width: '100%',
+    minWidth: '400px',
+  },
+  dialogField: {
+    width: '100%',
+    '& > *': {
+      width: '100%',
+    },
+  },
+  dialogInput: {
+    width: '100% !important',
+    minWidth: '100%',
+    boxSizing: 'border-box',
   },
 });
 
@@ -299,32 +312,25 @@ export const ContactsPage: React.FC = () => {
       columnId: 'actions',
       renderHeaderCell: () => 'Actions',
       renderCell: (contact) => (
-        <MenuButton
-          icon={<MoreHorizontalRegular />}
-          className={styles.actionButton}
-          size="small"
-          appearance="subtle"
-        >
-          <Menu>
-            <MenuList>
-              <MenuItem
-                icon={<EditRegular />}
-                onClick={() => handleEdit(contact)}
-              >
-                Edit
-              </MenuItem>
-              <MenuItem
-                icon={<DeleteRegular />}
-                onClick={() => handleDelete(contact.contactid || '')}
-              >
-                Delete
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </MenuButton>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <Button
+            icon={<EditRegular />}
+            appearance="subtle"
+            size="small"
+            onClick={() => handleEdit(contact)}
+            title="Edit"
+          />
+          <Button
+            icon={<DeleteRegular />}
+            appearance="subtle"
+            size="small"
+            onClick={() => handleDelete(contact.contactid || '')}
+            title="Delete"
+          />
+        </div>
       ),
     }),
-  ], [styles.actionButton, handleDelete, handleEdit]);
+  ], [handleDelete, handleEdit]);
 
   const headerContent = (
     <div className={styles.headerContainer}>
@@ -419,45 +425,50 @@ export const ContactsPage: React.FC = () => {
 
       {/* Create Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={(_, data) => setIsCreateDialogOpen(data.open)}>
-        <DialogSurface>
+        <DialogSurface style={{ maxWidth: '500px', minWidth: '400px' }}>
           <DialogTitle>Create New Contact</DialogTitle>
           <DialogContent>
             <DialogBody>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM }}>
-                <Field label="First Name">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, width: '100%' }}>
+                <Field label="First Name" style={{ width: '100%' }}>
                   <Input
                     value={formData.firstname}
                     onChange={(_, data) => handleInputChange('firstname', data.value)}
                     placeholder="Enter first name"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Last Name" required>
+                <Field label="Last Name" required style={{ width: '100%' }}>
                   <Input
                     value={formData.lastname}
                     onChange={(_, data) => handleInputChange('lastname', data.value)}
                     placeholder="Enter last name"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Email">
+                <Field label="Email" style={{ width: '100%' }}>
                   <Input
                     type="email"
                     value={formData.emailaddress1}
                     onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
                     placeholder="Enter email address"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Phone">
+                <Field label="Phone" style={{ width: '100%' }}>
                   <Input
                     value={formData.telephone1}
                     onChange={(_, data) => handleInputChange('telephone1', data.value)}
                     placeholder="Enter phone number"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Job Title">
+                <Field label="Job Title" style={{ width: '100%' }}>
                   <Input
                     value={formData.jobtitle}
                     onChange={(_, data) => handleInputChange('jobtitle', data.value)}
                     placeholder="Enter job title"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
               </div>
@@ -480,45 +491,50 @@ export const ContactsPage: React.FC = () => {
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={(_, data) => setIsEditDialogOpen(data.open)}>
-        <DialogSurface>
+        <DialogSurface style={{ maxWidth: '400px' }}>
           <DialogTitle>Edit Contact</DialogTitle>
           <DialogContent>
             <DialogBody>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM }}>
-                <Field label="First Name">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, width: '100%' }}>
+                <Field label="First Name" style={{ width: '100%' }}>
                   <Input
                     value={formData.firstname}
                     onChange={(_, data) => handleInputChange('firstname', data.value)}
                     placeholder="Enter first name"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Last Name" required>
+                <Field label="Last Name" required style={{ width: '100%' }}>
                   <Input
                     value={formData.lastname}
                     onChange={(_, data) => handleInputChange('lastname', data.value)}
                     placeholder="Enter last name"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Email">
+                <Field label="Email" style={{ width: '100%' }}>
                   <Input
                     type="email"
                     value={formData.emailaddress1}
                     onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
                     placeholder="Enter email address"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Phone">
+                <Field label="Phone" style={{ width: '100%' }}>
                   <Input
                     value={formData.telephone1}
                     onChange={(_, data) => handleInputChange('telephone1', data.value)}
                     placeholder="Enter phone number"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
-                <Field label="Job Title">
+                <Field label="Job Title" style={{ width: '100%' }}>
                   <Input
                     value={formData.jobtitle}
                     onChange={(_, data) => handleInputChange('jobtitle', data.value)}
                     placeholder="Enter job title"
+                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                   />
                 </Field>
               </div>
