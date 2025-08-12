@@ -4,7 +4,7 @@ import {
     Home24Regular,
     ContactCard24Regular,
     Building24Regular,
-    Chat24Regular,
+    Lightbulb24Regular,
     People24Regular,
     Apps24Regular,
     Settings24Regular
@@ -21,7 +21,7 @@ const mainNavigationItems = [
     { key: 'Home', icon: <Home24Regular />, label: 'Home' },
     { key: 'Contacts', icon: <ContactCard24Regular />, label: 'Contacts' },
     { key: 'Accounts', icon: <Building24Regular />, label: 'Accounts' },
-    { key: 'Chat', icon: <Chat24Regular />, label: 'Chat' },
+    { key: 'Starter', icon: <Lightbulb24Regular />, label: 'Starter' },
     { key: 'Teams', icon: <People24Regular />, label: 'Teams' },
     { key: 'Apps', icon: <Apps24Regular />, label: 'Apps' }
 ]

@@ -1,7 +1,7 @@
 export { default as HomePage } from './HomePage'
 export { ContactsPage } from './ContactsPage'
 export { AccountsPage } from './AccountsPage'
-export { default as ChatPage } from './ChatPage'
+export { default as StarterPage } from './StarterPage'
 export { default as TeamsPage } from './TeamsPage'
 export { default as AppsPage } from './AppsPage'
 export { default as SettingsPage } from './SettingsPage'
