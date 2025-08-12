@@ -1,7 +1,6 @@
 import React from 'react'
 import NavigationButton from '../common/NavigationButton'
 import {
-    Home24Regular,
     ContactCard24Regular,
     Building24Regular,
     Lightbulb24Regular,
@@ -16,7 +15,6 @@ interface SidebarProps {
 }
 
 const mainNavigationItems = [
-    { key: 'Home', icon: <Home24Regular />, label: 'Home' },
     { key: 'Contacts', icon: <ContactCard24Regular />, label: 'Contacts' },
     { key: 'Accounts', icon: <Building24Regular />, label: 'Accounts' },
     { key: 'Starter', icon: <Lightbulb24Regular />, label: 'Starter' },

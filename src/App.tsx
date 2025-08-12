@@ -1,6 +1,4 @@
 import { useState, Suspense, lazy } from 'react'
-// Eager-load only the most immediately visible / critical page (Home) to optimize TTI.
-import { HomePage } from './pages'
 // Lazily load heavier / less frequently accessed pages to reduce initial bundle size.
 const ContactsPage = lazy(() => import('./pages/ContactsPage'))
 const AccountsPage = lazy(() => import('./pages/AccountsPage'))
@@ -110,8 +108,6 @@ const useStyles = makeStyles({
 
 function App() {
   const styles = useStyles()
-  const [count, setCount] = useState(0)
-
   // Initialize theme from localStorage or default to dark theme
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
     const savedTheme = localStorage.getItem('isDarkTheme')
@@ -120,10 +116,11 @@ function App() {
 
   const [isProfilePopoverOpen, setIsProfilePopoverOpen] = useState(false)
 
-  // Initialize current page from localStorage or default to 'Home'
+  // Initialize current page from localStorage; map deprecated 'Home' to 'Contacts'
   const [currentPage, setCurrentPage] = useState(() => {
     const savedPage = localStorage.getItem('currentPage')
-    return savedPage ? savedPage : 'Home'
+    if (savedPage === 'Home') return 'Contacts'
+    return savedPage ? savedPage : 'Contacts'
   })
 
   // Function to toggle theme and persist to localStorage
@@ -139,12 +136,10 @@ function App() {
     localStorage.setItem('currentPage', page)
   }
 
-  const { user, userPhoto, loading, error } = useUserProfile()
+  const { user, userPhoto, loading } = useUserProfile()
 
   const renderPageContent = () => {
     switch (currentPage) {
-      case 'Home':
-        return <HomePage title={currentPage} error={error} count={count} setCount={setCount} />
       case 'Contacts':
         return <ContactsPage />
       case 'Accounts':
