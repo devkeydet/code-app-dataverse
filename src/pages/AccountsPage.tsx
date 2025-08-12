@@ -39,6 +39,7 @@ import { accountsService } from '../Services/accountsService';
 import type { accounts } from '../Models/accountsModel';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 import BasePage from '../components/common/BasePage';
+import { getEmailError } from '../utils/validation';
 
 const useStyles = makeStyles({
     headerContainer: {
@@ -147,6 +148,7 @@ export const AccountsPage: React.FC = () => {
     const [formData, setFormData] = useState<AccountFormData>(emptyAccount);
     const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const emailError = useMemo(() => getEmailError(formData.emailaddress1), [formData.emailaddress1]);
 
     // Load accounts
     const loadAccounts = useCallback(async () => {
@@ -240,6 +242,10 @@ export const AccountsPage: React.FC = () => {
             setError('Account name is required');
             return;
         }
+        if (emailError) {
+            setError('Please fix validation errors before submitting');
+            return;
+        }
 
         setIsSubmitting(true);
         setError(null);
@@ -266,6 +272,10 @@ export const AccountsPage: React.FC = () => {
     const handleSubmitEdit = async () => {
         if (!formData.name.trim() || !editingAccountId) {
             setError('Account name is required');
+            return;
+        }
+        if (emailError) {
+            setError('Please fix validation errors before submitting');
             return;
         }
 
@@ -476,8 +486,14 @@ export const AccountsPage: React.FC = () => {
                                         value={formData.emailaddress1}
                                         onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
                                         placeholder="Enter email address"
+                                        aria-invalid={!!emailError}
                                         style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                                     />
+                                    {emailError && (
+                                        <Text role="alert" size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+                                            {emailError}
+                                        </Text>
+                                    )}
                                 </Field>
                                 <Field label="Phone" style={{ width: '100%' }}>
                                     <Input
@@ -542,8 +558,14 @@ export const AccountsPage: React.FC = () => {
                                         value={formData.emailaddress1}
                                         onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
                                         placeholder="Enter email address"
+                                        aria-invalid={!!emailError}
                                         style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
                                     />
+                                    {emailError && (
+                                        <Text role="alert" size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+                                            {emailError}
+                                        </Text>
+                                    )}
                                 </Field>
                                 <Field label="Phone" style={{ width: '100%' }}>
                                     <Input
