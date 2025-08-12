@@ -248,6 +248,8 @@ export const AccountsPage: React.FC = () => {
                 setSuccess('Account created successfully');
                 setIsCreateDialogOpen(false);
                 setFormData(emptyAccount);
+                // Clear search so the newly added account is visible
+                setSearchTerm('');
                 loadAccounts();
             } else {
                 setError('Failed to create account');

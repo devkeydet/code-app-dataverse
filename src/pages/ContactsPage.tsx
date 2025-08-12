@@ -248,6 +248,8 @@ export const ContactsPage: React.FC = () => {
         setSuccess('Contact created successfully');
         setIsCreateDialogOpen(false);
         setFormData(emptyContact);
+        // Clear search to ensure the newly added contact is visible in full list
+        setSearchTerm('');
         loadContacts();
       } else {
         setError('Failed to create contact');
