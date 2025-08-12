@@ -39,6 +39,7 @@ import { accountsService } from '../Services/accountsService';
 import type { accounts } from '../Models/accountsModel';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 import BasePage from '../components/common/BasePage';
+import { ConfirmDialog } from '../components/common';
 import { getEmailError } from '../utils/validation';
 
 const useStyles = makeStyles({
@@ -148,6 +149,9 @@ export const AccountsPage: React.FC = () => {
     const [formData, setFormData] = useState<AccountFormData>(emptyAccount);
     const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    // Delete confirmation state
+    const [deleteTarget, setDeleteTarget] = useState<accounts | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
     const emailError = useMemo(() => getEmailError(formData.emailaddress1), [formData.emailaddress1]);
 
     // Load accounts
@@ -223,19 +227,27 @@ export const AccountsPage: React.FC = () => {
         setIsEditDialogOpen(true);
     }, []);
 
-    const handleDelete = useCallback(async (accountId: string) => {
-        if (!window.confirm('Are you sure you want to delete this account?')) {
+    const promptDelete = useCallback((account: accounts) => {
+        setDeleteTarget(account);
+    }, []);
+
+    const handleConfirmDelete = useCallback(async () => {
+        if (!deleteTarget?.accountid) {
+            setDeleteTarget(null);
             return;
         }
-
+        setIsDeleting(true);
         try {
-            await accountsService.delete(accountId);
+            await accountsService.delete(deleteTarget.accountid);
             setSuccess('Account deleted successfully');
+            setDeleteTarget(null);
             loadAccounts();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to delete account');
+        } finally {
+            setIsDeleting(false);
         }
-    }, [loadAccounts]);
+    }, [deleteTarget, loadAccounts]);
 
     const handleSubmitCreate = async () => {
         if (!formData.name.trim()) {
@@ -348,13 +360,13 @@ export const AccountsPage: React.FC = () => {
                         icon={<DeleteRegular />}
                         appearance="subtle"
                         size="small"
-                        onClick={() => handleDelete(account.accountid || '')}
+                        onClick={() => promptDelete(account)}
                         title="Delete"
                     />
                 </div>
             ),
         }),
-    ], [handleDelete, handleEdit]);
+    ], [handleEdit, promptDelete]);
 
     const headerContent = (
         <div className={styles.headerContainer}>
@@ -600,6 +612,20 @@ export const AccountsPage: React.FC = () => {
                     </DialogContent>
                 </DialogSurface>
             </Dialog>
+
+            <ConfirmDialog
+                open={!!deleteTarget}
+                title="Delete Account"
+                message={<><span>Are you sure you want to delete </span><strong>{deleteTarget?.name || 'this account'}</strong><span>? This action cannot be undone.</span></>}
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                onCancel={() => setDeleteTarget(null)}
+                onConfirm={handleConfirmDelete}
+                loading={isDeleting}
+                disabled={false}
+                size="large"
+                maxWidth="510px"
+            />
         </BasePage>
     );
 };

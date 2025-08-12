@@ -40,6 +40,7 @@ import { contactsService } from '../Services/contactsService';
 import type { contacts } from '../Models/contactsModel';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 import BasePage from '../components/common/BasePage';
+import { ConfirmDialog } from '../components/common';
 import { getEmailError } from '../utils/validation';
 
 const useStyles = makeStyles({
@@ -149,6 +150,9 @@ export const ContactsPage: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>(emptyContact);
   const [editingContactId, setEditingContactId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Delete confirmation state
+  const [deleteTarget, setDeleteTarget] = useState<contacts | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const emailError = useMemo(() => getEmailError(formData.emailaddress1), [formData.emailaddress1]);
 
   // Load contacts
@@ -223,19 +227,27 @@ export const ContactsPage: React.FC = () => {
     setIsEditDialogOpen(true);
   }, []);
 
-  const handleDelete = useCallback(async (contactId: string) => {
-    if (!window.confirm('Are you sure you want to delete this contact?')) {
+  const promptDelete = useCallback((contact: contacts) => {
+    setDeleteTarget(contact);
+  }, []);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (!deleteTarget?.contactid) {
+      setDeleteTarget(null);
       return;
     }
-
+    setIsDeleting(true);
     try {
-      await contactsService.delete(contactId);
+      await contactsService.delete(deleteTarget.contactid);
       setSuccess('Contact deleted successfully');
+      setDeleteTarget(null);
       loadContacts();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete contact');
+    } finally {
+      setIsDeleting(false);
     }
-  }, [loadContacts]);
+  }, [deleteTarget, loadContacts]);
 
   const handleSubmitCreate = async () => {
     if (!formData.lastname.trim()) {
@@ -342,13 +354,13 @@ export const ContactsPage: React.FC = () => {
             icon={<DeleteRegular />}
             appearance="subtle"
             size="small"
-            onClick={() => handleDelete(contact.contactid || '')}
+            onClick={() => promptDelete(contact)}
             title="Delete"
           />
         </div>
       ),
     }),
-  ], [handleDelete, handleEdit]);
+  ], [handleEdit, promptDelete]);
 
   const headerContent = (
     <div className={styles.headerContainer}>
@@ -594,6 +606,20 @@ export const ContactsPage: React.FC = () => {
           </DialogContent>
         </DialogSurface>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete Contact"
+        message={<><span>Are you sure you want to delete </span><strong>{deleteTarget?.fullname || 'this contact'}</strong><span>? This action cannot be undone.</span></>}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleConfirmDelete}
+        loading={isDeleting}
+        disabled={false}
+        size="large"
+        maxWidth="510px"
+      />
     </BasePage>
   );
 };
