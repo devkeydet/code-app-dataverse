@@ -36,13 +36,17 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
     }
 
     // Blue vertical line overlay for selected state
+    // Selection indicator: positioned so it sits flush with the outer left edge of the sidebar.
+    // Sidebar has 4px horizontal padding; button sits inside. Using -4px compensates exactly.
     const blueLineStyle: React.CSSProperties = {
         position: 'absolute',
-        left: '-12px', // Push all the way to the absolute left edge of the browser frame
-        top: '8px', // Shorter line height by adding top margin
-        bottom: '8px', // Shorter line height by adding bottom margin
-        width: '2px', // Thinner line
+        left: '-6px', // Slightly closer to extreme left edge
+        top: '6px',
+        bottom: '6px',
+        width: '2px', // Thinner
         backgroundColor: tokens.colorBrandBackground,
+        borderRadius: '0 3px 3px 0',
+        boxShadow: `0 0 0 1px ${tokens.colorNeutralBackground2}`,
         display: isActive ? 'block' : 'none',
     }
 
@@ -52,6 +56,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
             title={label}
             onClick={onClick}
             style={containerStyle}
+            aria-current={isActive ? 'page' : undefined}
         >
             {/* Blue vertical line overlay for selected state */}
             <div style={blueLineStyle}></div>
