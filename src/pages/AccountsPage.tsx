@@ -40,7 +40,9 @@ import type { accounts } from '../Models/accountsModel';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 import BasePage from '../components/common/BasePage';
 import { ConfirmDialog } from '../components/common';
-import { getEmailError, getPhoneError, sanitizePhoneInput, coercePhone, formatPhone } from '../utils/validation';
+import { getEmailError, coercePhone } from '../utils/validation';
+import { PhoneField } from '../components/form/PhoneField';
+import { useDebouncedValue, useStatusMessage } from '../hooks';
 
 const useStyles = makeStyles({
     headerContainer: {
@@ -146,8 +148,9 @@ export const AccountsPage: React.FC = () => {
     const [filteredAccounts, setFilteredAccounts] = useState<accounts[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearch = useDebouncedValue(searchTerm, 300);
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
+    const { message, showSuccess, showError, clear } = useStatusMessage();
 
     // Form state
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -159,7 +162,7 @@ export const AccountsPage: React.FC = () => {
     const [deleteTarget, setDeleteTarget] = useState<accounts | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const emailError = useMemo(() => getEmailError(formData.emailaddress1), [formData.emailaddress1]);
-    const phoneError = useMemo(() => getPhoneError(formData.address1_telephone1), [formData.address1_telephone1]);
+    // Phone validation handled internally by PhoneField
 
     // Load accounts
     const loadAccounts = useCallback(async () => {
@@ -193,19 +196,19 @@ export const AccountsPage: React.FC = () => {
 
     // Search filtering
     useEffect(() => {
-        if (!searchTerm.trim()) {
+        if (!debouncedSearch.trim()) {
             setFilteredAccounts(accounts);
         } else {
             const filtered = accounts.filter(account =>
-                account.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                account.emailaddress1?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                account.address1_telephone1?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                account.websiteurl?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                account.accountnumber?.toLowerCase().includes(searchTerm.toLowerCase())
+                account.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+                account.emailaddress1?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+                account.address1_telephone1?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+                account.websiteurl?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+                account.accountnumber?.toLowerCase().includes(debouncedSearch.toLowerCase())
             );
             setFilteredAccounts(filtered);
         }
-    }, [accounts, searchTerm]);
+    }, [accounts, debouncedSearch]);
 
     // Load accounts when ready
     useEffect(() => {
@@ -246,7 +249,7 @@ export const AccountsPage: React.FC = () => {
         setIsDeleting(true);
         try {
             await accountsService.delete(deleteTarget.accountid);
-            setSuccess('Account deleted successfully');
+            showSuccess('Account deleted successfully');
             setDeleteTarget(null);
             loadAccounts();
         } catch (err) {
@@ -254,14 +257,14 @@ export const AccountsPage: React.FC = () => {
         } finally {
             setIsDeleting(false);
         }
-    }, [deleteTarget, loadAccounts]);
+    }, [deleteTarget, loadAccounts, showSuccess]);
 
     const handleSubmitCreate = async () => {
         if (!formData.name.trim()) {
             setError('Account name is required');
             return;
         }
-        if (emailError || phoneError) {
+        if (emailError) {
             setError('Please fix validation errors before submitting');
             return;
         }
@@ -276,17 +279,17 @@ export const AccountsPage: React.FC = () => {
             };
             const result = await accountsService.create(prepared as Omit<accounts, 'accountid'>);
             if (result?.success) {
-                setSuccess('Account created successfully');
+                showSuccess('Account created successfully');
                 setIsCreateDialogOpen(false);
                 setFormData(emptyAccount);
                 // Clear search so the newly added account is visible
                 setSearchTerm('');
                 loadAccounts();
             } else {
-                setError('Failed to create account');
+                showError('Failed to create account');
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to create account');
+            showError(err instanceof Error ? err.message : 'Failed to create account');
         } finally {
             setIsSubmitting(false);
         }
@@ -297,7 +300,7 @@ export const AccountsPage: React.FC = () => {
             setError('Account name is required');
             return;
         }
-        if (emailError || phoneError) {
+        if (emailError) {
             setError('Please fix validation errors before submitting');
             return;
         }
@@ -312,16 +315,16 @@ export const AccountsPage: React.FC = () => {
             };
             const result = await accountsService.update(editingAccountId, prepared);
             if (result?.success) {
-                setSuccess('Account updated successfully');
+                showSuccess('Account updated successfully');
                 setIsEditDialogOpen(false);
                 setFormData(emptyAccount);
                 setEditingAccountId(null);
                 loadAccounts();
             } else {
-                setError('Failed to update account');
+                showError('Failed to update account');
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to update account');
+            showError(err instanceof Error ? err.message : 'Failed to update account');
         } finally {
             setIsSubmitting(false);
         }
@@ -420,20 +423,20 @@ export const AccountsPage: React.FC = () => {
 
             {/* Messages */}
             {error && (
-                <MessageBar intent="error">
+                <MessageBar intent="error" role="alert">
                     <MessageBarBody>{error}</MessageBarBody>
                 </MessageBar>
             )}
-            {success && (
-                <MessageBar intent="success">
-                    <MessageBarBody>{success}</MessageBarBody>
+            {message && (
+                <MessageBar intent={message.intent} role="status">
+                    <MessageBarBody>{message.text}</MessageBarBody>
                     <MessageBarActions>
                         <Button
                             aria-label="Dismiss"
                             appearance="transparent"
                             size="small"
                             icon={<DismissRegular />}
-                            onClick={() => setSuccess(null)}
+                            onClick={clear}
                         />
                     </MessageBarActions>
                 </MessageBar>
@@ -511,14 +514,7 @@ export const AccountsPage: React.FC = () => {
                                         placeholder="Enter email address"
                                         aria-invalid={!!emailError} />
                                 </Field>
-                                <Field label="Phone" className={styles.fullWidthField} validationState={phoneError ? 'error' : 'none'} validationMessage={phoneError || undefined}>
-                                    <Input className={styles.fullWidthInput}
-                                        type="tel"
-                                        value={formData.address1_telephone1}
-                                        onChange={(_, data) => handleInputChange('address1_telephone1', sanitizePhoneInput(data.value))}
-                                        onBlur={() => setFormData(p => ({ ...p, address1_telephone1: formatPhone(p.address1_telephone1) }))}
-                                        placeholder="Enter phone number" aria-invalid={!!phoneError} />
-                                </Field>
+                                <PhoneField value={formData.address1_telephone1 || ''} onChange={v => handleInputChange('address1_telephone1', v)} />
                                 <Field label="Website" className={styles.fullWidthField}>
                                     <Input className={styles.fullWidthInput}
                                         type="url"
@@ -563,14 +559,7 @@ export const AccountsPage: React.FC = () => {
                                         placeholder="Enter email address"
                                         aria-invalid={!!emailError} />
                                 </Field>
-                                <Field label="Phone" className={styles.fullWidthField} validationState={phoneError ? 'error' : 'none'} validationMessage={phoneError || undefined}>
-                                    <Input className={styles.fullWidthInput}
-                                        type="tel"
-                                        value={formData.address1_telephone1}
-                                        onChange={(_, data) => handleInputChange('address1_telephone1', sanitizePhoneInput(data.value))}
-                                        onBlur={() => setFormData(p => ({ ...p, address1_telephone1: formatPhone(p.address1_telephone1) }))}
-                                        placeholder="Enter phone number" aria-invalid={!!phoneError} />
-                                </Field>
+                                <PhoneField value={formData.address1_telephone1 || ''} onChange={v => handleInputChange('address1_telephone1', v)} />
                                 <Field label="Website" className={styles.fullWidthField}>
                                     <Input className={styles.fullWidthInput}
                                         type="url"
