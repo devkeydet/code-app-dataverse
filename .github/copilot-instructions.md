@@ -49,6 +49,7 @@ This app MUST use Fluent UI v9 components and follow Microsoft Fluent Design pri
 **Reference Documentation:**
 - **Fluent Design System**: https://fluent2.microsoft.design/
 - **React Fluent UI v9**: https://react.fluentui.dev/
+- **Microsoft Fluent 2 Web Figma**: https://www.figma.com/community/file/836828295772957889
 
 **Design Requirements:**
 1. **Microsoft Teams Inspiration**: The app should look and feel like Microsoft Teams
