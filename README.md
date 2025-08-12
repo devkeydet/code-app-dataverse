@@ -32,9 +32,11 @@ pac auth who            # verify the correct environment is now active
 ```
 
 1. Configure `power.config.json`:
- - Ensure `appId` is an empty string: `"appId": ""` (blank forces creation of a new app record on first push)
- - Set `environmentId` to the GUID of the environment you just selected (from `pac env list` output)
- - Leave the rest as-is for now
+
+- Ensure `appId` is an empty string: `"appId": ""` (blank forces creation of a new app record on first push)
+- Set `environmentId` to the GUID of the environment you just selected (from `pac env list` output)
+- Update the Dataverse `instanceUrl` under `databaseReferences.default.cds` to your own environment URL (e.g. `https://yourorg.crm.dynamics.com/`). Using the sample URL will cause data operations to fail or target the wrong environment.
+- Leave the rest as-is for now
 
 1. Build the app (required before first push so the dist folder exists):
 

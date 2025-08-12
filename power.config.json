@@ -1,8 +1,8 @@
 {
-  "appId": "e347d6e6-6054-4760-9a9f-a6949bfbcd31",
+  "appId": "",
   "appDisplayName": "code-app-dataverse",
   "description": null,
-  "environmentId": "72884ac1-97c4-e333-bcea-c453426eb31c",
+  "environmentId": "your-d",
   "buildPath": "./dist",
   "buildEntryPoint": "index.html",
   "logoPath": ".\\src\\assets\\react.svg",
@@ -22,7 +22,7 @@
   "databaseReferences": {
     "default.cds": {
       "state": "Configured",
-      "instanceUrl": "https://ppa-marcsc-dev-1.crm.dynamics.com/",
+      "instanceUrl": "https://your-name-here.crm.dynamics.com/",
       "webApiVersion": "v9.0",
       "dataSources": {
         "accounts": {
