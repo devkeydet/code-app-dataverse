@@ -32,7 +32,7 @@ pac auth who            # verify the correct environment is now active
 ```
 
 1. Configure `power.config.json`:
- - Set `appId` to an empty string: `"appId": ""` (blank forces creation of a new app record on first push)
+ - Ensure `appId` is an empty string: `"appId": ""` (blank forces creation of a new app record on first push)
  - Set `environmentId` to the GUID of the environment you just selected (from `pac env list` output)
  - Leave the rest as-is for now
 
