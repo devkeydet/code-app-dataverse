@@ -8,6 +8,7 @@ import {
     DialogBody,
     DialogActions,
     Button,
+    tokens,
 } from '@fluentui/react-components';
 
 export interface ConfirmDialogProps {
@@ -49,7 +50,7 @@ const useStyles = makeStyles({
         display: 'block',
     },
     actions: {
-        marginTop: '16px',
+        marginTop: tokens.spacingVerticalM,
     },
 });
 
