@@ -4,6 +4,6 @@ export { default as UserProfile } from './UserProfile'
 export { default as AboutCard } from './AboutCard'
 export { default as ThemeToggleCard } from './ThemeToggleCard'
 export { default as InteractiveCounter } from './InteractiveCounter'
-export { default as CenteredContent } from './CenteredContent'
+// CenteredContent removed (unused)
 export { default as BasePage } from './BasePage'
 export { default as ConfirmDialog } from './ConfirmDialog'
