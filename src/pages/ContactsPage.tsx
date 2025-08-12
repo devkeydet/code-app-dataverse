@@ -41,7 +41,7 @@ import type { contacts } from '../Models/contactsModel';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 import BasePage from '../components/common/BasePage';
 import { ConfirmDialog } from '../components/common';
-import { getEmailError } from '../utils/validation';
+import { getEmailError, getPhoneError, sanitizePhoneInput, coercePhone, formatPhone } from '../utils/validation';
 
 const useStyles = makeStyles({
   headerContainer: {
@@ -160,6 +160,7 @@ export const ContactsPage: React.FC = () => {
   const [deleteTarget, setDeleteTarget] = useState<contacts | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const emailError = useMemo(() => getEmailError(formData.emailaddress1), [formData.emailaddress1]);
+  const phoneError = useMemo(() => getPhoneError(formData.telephone1), [formData.telephone1]);
 
   // Load contacts
   const loadContacts = useCallback(async () => {
@@ -260,7 +261,7 @@ export const ContactsPage: React.FC = () => {
       setError('Last name is required');
       return;
     }
-    if (emailError) {
+    if (emailError || phoneError) {
       setError('Please fix validation errors before submitting');
       return;
     }
@@ -269,7 +270,11 @@ export const ContactsPage: React.FC = () => {
     setError(null);
 
     try {
-      const result = await contactsService.create(formData as Omit<contacts, 'contactid'>);
+      const prepared: ContactFormData = {
+        ...formData,
+        telephone1: coercePhone(formData.telephone1)
+      };
+      const result = await contactsService.create(prepared as Omit<contacts, 'contactid'>);
       if (result?.success) {
         setSuccess('Contact created successfully');
         setIsCreateDialogOpen(false);
@@ -292,7 +297,7 @@ export const ContactsPage: React.FC = () => {
       setError('Last name is required');
       return;
     }
-    if (emailError) {
+    if (emailError || phoneError) {
       setError('Please fix validation errors before submitting');
       return;
     }
@@ -301,7 +306,11 @@ export const ContactsPage: React.FC = () => {
     setError(null);
 
     try {
-      const result = await contactsService.update(editingContactId, formData);
+      const prepared: ContactFormData = {
+        ...formData,
+        telephone1: coercePhone(formData.telephone1)
+      };
+      const result = await contactsService.update(editingContactId, prepared);
       if (result?.success) {
         setSuccess('Contact updated successfully');
         setIsEditDialogOpen(false);
@@ -485,8 +494,8 @@ export const ContactsPage: React.FC = () => {
                 <Field label="Email" className={styles.fullWidthField} validationState={emailError ? 'error' : 'none'} validationMessage={emailError || undefined}>
                   <Input className={styles.fullWidthInput} type="email" value={formData.emailaddress1} onChange={(_, d) => handleInputChange('emailaddress1', d.value)} placeholder="Enter email address" aria-invalid={!!emailError} />
                 </Field>
-                <Field label="Phone" className={styles.fullWidthField}>
-                  <Input className={styles.fullWidthInput} value={formData.telephone1} onChange={(_, d) => handleInputChange('telephone1', d.value)} placeholder="Enter phone number" />
+                <Field label="Phone" className={styles.fullWidthField} validationState={phoneError ? 'error' : 'none'} validationMessage={phoneError || undefined}>
+                  <Input className={styles.fullWidthInput} value={formData.telephone1} onChange={(_, d) => handleInputChange('telephone1', sanitizePhoneInput(d.value))} onBlur={() => setFormData(p => ({ ...p, telephone1: formatPhone(p.telephone1) }))} placeholder="Enter phone number" aria-invalid={!!phoneError} />
                 </Field>
                 <Field label="Job Title" className={styles.fullWidthField}>
                   <Input className={styles.fullWidthInput} value={formData.jobtitle} onChange={(_, d) => handleInputChange('jobtitle', d.value)} placeholder="Enter job title" />
@@ -519,8 +528,8 @@ export const ContactsPage: React.FC = () => {
                 <Field label="Email" className={styles.fullWidthField} validationState={emailError ? 'error' : 'none'} validationMessage={emailError || undefined}>
                   <Input className={styles.fullWidthInput} type="email" value={formData.emailaddress1} onChange={(_, d) => handleInputChange('emailaddress1', d.value)} placeholder="Enter email address" aria-invalid={!!emailError} />
                 </Field>
-                <Field label="Phone" className={styles.fullWidthField}>
-                  <Input className={styles.fullWidthInput} value={formData.telephone1} onChange={(_, d) => handleInputChange('telephone1', d.value)} placeholder="Enter phone number" />
+                <Field label="Phone" className={styles.fullWidthField} validationState={phoneError ? 'error' : 'none'} validationMessage={phoneError || undefined}>
+                  <Input className={styles.fullWidthInput} value={formData.telephone1} onChange={(_, d) => handleInputChange('telephone1', sanitizePhoneInput(d.value))} onBlur={() => setFormData(p => ({ ...p, telephone1: formatPhone(p.telephone1) }))} placeholder="Enter phone number" aria-invalid={!!phoneError} />
                 </Field>
                 <Field label="Job Title" className={styles.fullWidthField}>
                   <Input className={styles.fullWidthInput} value={formData.jobtitle} onChange={(_, d) => handleInputChange('jobtitle', d.value)} placeholder="Enter job title" />

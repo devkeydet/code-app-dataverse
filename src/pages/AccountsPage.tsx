@@ -40,7 +40,7 @@ import type { accounts } from '../Models/accountsModel';
 import { usePowerRuntime } from '../hooks/usePowerRuntime';
 import BasePage from '../components/common/BasePage';
 import { ConfirmDialog } from '../components/common';
-import { getEmailError } from '../utils/validation';
+import { getEmailError, getPhoneError, sanitizePhoneInput, coercePhone, formatPhone } from '../utils/validation';
 
 const useStyles = makeStyles({
     headerContainer: {
@@ -159,6 +159,7 @@ export const AccountsPage: React.FC = () => {
     const [deleteTarget, setDeleteTarget] = useState<accounts | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const emailError = useMemo(() => getEmailError(formData.emailaddress1), [formData.emailaddress1]);
+    const phoneError = useMemo(() => getPhoneError(formData.address1_telephone1), [formData.address1_telephone1]);
 
     // Load accounts
     const loadAccounts = useCallback(async () => {
@@ -260,7 +261,7 @@ export const AccountsPage: React.FC = () => {
             setError('Account name is required');
             return;
         }
-        if (emailError) {
+        if (emailError || phoneError) {
             setError('Please fix validation errors before submitting');
             return;
         }
@@ -269,7 +270,11 @@ export const AccountsPage: React.FC = () => {
         setError(null);
 
         try {
-            const result = await accountsService.create(formData as Omit<accounts, 'accountid'>);
+            const prepared: AccountFormData = {
+                ...formData,
+                address1_telephone1: coercePhone(formData.address1_telephone1)
+            };
+            const result = await accountsService.create(prepared as Omit<accounts, 'accountid'>);
             if (result?.success) {
                 setSuccess('Account created successfully');
                 setIsCreateDialogOpen(false);
@@ -292,7 +297,7 @@ export const AccountsPage: React.FC = () => {
             setError('Account name is required');
             return;
         }
-        if (emailError) {
+        if (emailError || phoneError) {
             setError('Please fix validation errors before submitting');
             return;
         }
@@ -301,7 +306,11 @@ export const AccountsPage: React.FC = () => {
         setError(null);
 
         try {
-            const result = await accountsService.update(editingAccountId, formData);
+            const prepared: AccountFormData = {
+                ...formData,
+                address1_telephone1: coercePhone(formData.address1_telephone1)
+            };
+            const result = await accountsService.update(editingAccountId, prepared);
             if (result?.success) {
                 setSuccess('Account updated successfully');
                 setIsEditDialogOpen(false);
@@ -502,12 +511,13 @@ export const AccountsPage: React.FC = () => {
                                         placeholder="Enter email address"
                                         aria-invalid={!!emailError} />
                                 </Field>
-                                <Field label="Phone" className={styles.fullWidthField}>
+                                <Field label="Phone" className={styles.fullWidthField} validationState={phoneError ? 'error' : 'none'} validationMessage={phoneError || undefined}>
                                     <Input className={styles.fullWidthInput}
                                         type="tel"
                                         value={formData.address1_telephone1}
-                                        onChange={(_, data) => handleInputChange('address1_telephone1', data.value)}
-                                        placeholder="Enter phone number" />
+                                        onChange={(_, data) => handleInputChange('address1_telephone1', sanitizePhoneInput(data.value))}
+                                        onBlur={() => setFormData(p => ({ ...p, address1_telephone1: formatPhone(p.address1_telephone1) }))}
+                                        placeholder="Enter phone number" aria-invalid={!!phoneError} />
                                 </Field>
                                 <Field label="Website" className={styles.fullWidthField}>
                                     <Input className={styles.fullWidthInput}
@@ -553,12 +563,13 @@ export const AccountsPage: React.FC = () => {
                                         placeholder="Enter email address"
                                         aria-invalid={!!emailError} />
                                 </Field>
-                                <Field label="Phone" className={styles.fullWidthField}>
+                                <Field label="Phone" className={styles.fullWidthField} validationState={phoneError ? 'error' : 'none'} validationMessage={phoneError || undefined}>
                                     <Input className={styles.fullWidthInput}
                                         type="tel"
                                         value={formData.address1_telephone1}
-                                        onChange={(_, data) => handleInputChange('address1_telephone1', data.value)}
-                                        placeholder="Enter phone number" />
+                                        onChange={(_, data) => handleInputChange('address1_telephone1', sanitizePhoneInput(data.value))}
+                                        onBlur={() => setFormData(p => ({ ...p, address1_telephone1: formatPhone(p.address1_telephone1) }))}
+                                        placeholder="Enter phone number" aria-invalid={!!phoneError} />
                                 </Field>
                                 <Field label="Website" className={styles.fullWidthField}>
                                     <Input className={styles.fullWidthInput}
