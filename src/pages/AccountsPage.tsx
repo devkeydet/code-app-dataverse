@@ -19,6 +19,7 @@ import {
     type TableColumnDefinition,
     MessageBar,
     MessageBarBody,
+    MessageBarActions,
     Spinner,
     SearchBox,
     Text,
@@ -32,6 +33,7 @@ import {
     DeleteRegular,
     SearchRegular,
     ArrowClockwiseRegular,
+    DismissRegular,
 } from '@fluentui/react-icons';
 import { accountsService } from '../Services/accountsService';
 import type { accounts } from '../Models/accountsModel';
@@ -388,6 +390,15 @@ export const AccountsPage: React.FC = () => {
             {success && (
                 <MessageBar intent="success">
                     <MessageBarBody>{success}</MessageBarBody>
+                    <MessageBarActions>
+                        <Button
+                            aria-label="Dismiss"
+                            appearance="transparent"
+                            size="small"
+                            icon={<DismissRegular />}
+                            onClick={() => setSuccess(null)}
+                        />
+                    </MessageBarActions>
                 </MessageBar>
             )}
         </div>
