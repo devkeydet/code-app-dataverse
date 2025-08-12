@@ -5,8 +5,6 @@ import {
     ContactCard24Regular,
     Building24Regular,
     Lightbulb24Regular,
-    People24Regular,
-    Apps24Regular,
     Settings24Regular
 } from '@fluentui/react-icons'
 
@@ -22,8 +20,6 @@ const mainNavigationItems = [
     { key: 'Contacts', icon: <ContactCard24Regular />, label: 'Contacts' },
     { key: 'Accounts', icon: <Building24Regular />, label: 'Accounts' },
     { key: 'Starter', icon: <Lightbulb24Regular />, label: 'Starter' },
-    { key: 'Teams', icon: <People24Regular />, label: 'Teams' },
-    { key: 'Apps', icon: <Apps24Regular />, label: 'Apps' }
 ]
 
 const bottomNavigationItems = [
