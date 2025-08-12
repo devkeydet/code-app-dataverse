@@ -1,5 +1,11 @@
-import { useState } from 'react'
-import { HomePage, ContactsPage, AccountsPage, StarterPage, SettingsPage } from './pages'
+import { useState, Suspense, lazy } from 'react'
+// Eager-load only the most immediately visible / critical page (Home) to optimize TTI.
+import { HomePage } from './pages'
+// Lazily load heavier / less frequently accessed pages to reduce initial bundle size.
+const ContactsPage = lazy(() => import('./pages/ContactsPage'))
+const AccountsPage = lazy(() => import('./pages/AccountsPage'))
+const StarterPage = lazy(() => import('./pages/StarterPage'))
+const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 import { TitleBar, Sidebar, UserProfile } from './components'
 import { useUserProfile } from './hooks'
 import {
@@ -204,7 +210,9 @@ function App() {
 
           <div className={styles.mainContent}>
             <div className={styles.contentArea}>
-              {renderPageContent()}
+              <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 32 }}><Spinner size="large" /></div>}>
+                {renderPageContent()}
+              </Suspense>
             </div>
           </div>
         </div>

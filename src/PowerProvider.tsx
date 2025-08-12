@@ -1,4 +1,3 @@
-import { initialize } from "@pa-client/power-code-sdk/lib/Lifecycle";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { PowerRuntimeContext, type PowerRuntimeContextType } from "./contexts/powerRuntimeContext";
 
@@ -15,7 +14,10 @@ export default function PowerProvider({ children }: PowerProviderProps) {
         let cancelled = false;
         const initApp = async () => {
             try {
-                await initialize();
+                // Dynamically import to allow the SDK (and its dependencies) to be code-split from the initial UI shell.
+                const mod = await import("@pa-client/power-code-sdk/lib/Lifecycle");
+                if (cancelled) return;
+                await mod.initialize();
                 if (cancelled) return;
                 setIsReady(true);
                 setInitializedAt(new Date().toISOString());

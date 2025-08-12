@@ -15,4 +15,19 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Strategic vendor chunking for better long-term caching & smaller initial bundle.
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // Order matters: check more specific packages first to avoid them being captured by generic 'react' substring.
+            if (id.includes('@fluentui')) return 'fluentui';
+            if (id.includes('@pa-client/power-code-sdk')) return 'power-sdk';
+            if (/react-dom|node_modules\\react\\|node_modules\/react\//.test(id)) return 'react';
+          }
+        }
+      }
+    }
+  }
 });
