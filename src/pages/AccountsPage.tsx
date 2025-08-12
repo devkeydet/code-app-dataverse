@@ -42,24 +42,28 @@ const useStyles = makeStyles({
     headerContainer: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
+        gap: tokens.spacingVerticalS,
     },
-    titleRow: {
-        marginBottom: '8px',
-    },
-    toolbarRow: {
+    topRow: {
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: tokens.spacingHorizontalM,
+        width: '100%',
+        gap: tokens.spacingHorizontalXL,
     },
-    searchContainer: {
+    titleGroup: {
         display: 'flex',
-        gap: tokens.spacingHorizontalM,
         alignItems: 'center',
+        gap: tokens.spacingHorizontalS,
+        minWidth: 0,
+    },
+    actionsGroup: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: tokens.spacingHorizontalM,
     },
     searchBox: {
-        width: '400px',
+        width: '340px',
     },
     fullWidthContainer: {
         // Expand to match the header content width exactly
@@ -340,12 +344,21 @@ export const AccountsPage: React.FC = () => {
 
     const headerContent = (
         <div className={styles.headerContainer}>
-            {/* Title */}
-            <Title1 className={styles.titleRow}>Accounts</Title1>
-
-            {/* Toolbar */}
-            <div className={styles.toolbarRow}>
-                <div className={styles.searchContainer}>
+            {/* Top Row with Title + Refresh (left) and Search + New Account (right) */}
+            <div className={styles.topRow}>
+                <div className={styles.titleGroup}>
+                    <Title1 as="h1">Accounts</Title1>
+                    <Button
+                        icon={<ArrowClockwiseRegular />}
+                        onClick={loadAccounts}
+                        disabled={loading}
+                        size="small"
+                        appearance="subtle"
+                        aria-label="Refresh accounts"
+                        title="Refresh"
+                    />
+                </div>
+                <div className={styles.actionsGroup}>
                     <SearchBox
                         placeholder="Search accounts..."
                         value={searchTerm}
@@ -354,23 +367,14 @@ export const AccountsPage: React.FC = () => {
                         className={styles.searchBox}
                     />
                     <Button
-                        icon={<ArrowClockwiseRegular />}
-                        onClick={loadAccounts}
-                        disabled={loading}
+                        appearance="primary"
+                        icon={<AddRegular />}
+                        onClick={handleCreate}
                         size="medium"
-                        appearance="subtle"
-                        title="Refresh"
-                    />
+                    >
+                        New Account
+                    </Button>
                 </div>
-
-                <Button
-                    appearance="primary"
-                    icon={<AddRegular />}
-                    onClick={handleCreate}
-                    size="medium"
-                >
-                    New Account
-                </Button>
             </div>
 
             {/* Messages */}
