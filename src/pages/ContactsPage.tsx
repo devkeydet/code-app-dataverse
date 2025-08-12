@@ -98,23 +98,29 @@ const useStyles = makeStyles({
     padding: tokens.spacingVerticalXXL,
     color: tokens.colorNeutralForeground3,
   },
-  dialogForm: {
+  contactForm: {
     display: 'flex',
     flexDirection: 'column',
     gap: tokens.spacingVerticalM,
+    marginTop: tokens.spacingVerticalXS,
     width: '100%',
-    minWidth: '400px',
+    // About 15% narrower than original 420px
+    minWidth: '360px',
+    boxSizing: 'border-box'
   },
-  dialogField: {
+  narrowDialogSurface: {
+    // Constrain overall surface width (~15% narrower than ~500px default)
+    maxWidth: '430px',
+    width: '100%'
+  },
+  fullWidthField: {
     width: '100%',
-    '& > *': {
-      width: '100%',
-    },
+    '& > *': { width: '100%' }
   },
-  dialogInput: {
-    width: '100% !important',
-    minWidth: '100%',
-    boxSizing: 'border-box',
+  fullWidthInput: {
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box'
   },
 });
 
@@ -465,145 +471,69 @@ export const ContactsPage: React.FC = () => {
 
       {/* Create Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={(_, data) => setIsCreateDialogOpen(data.open)}>
-        <DialogSurface style={{ maxWidth: '500px', minWidth: '400px' }}>
-          <DialogTitle>Create New Contact</DialogTitle>
-          <DialogContent>
-            <DialogBody>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, width: '100%' }}>
-                <Field label="First Name" style={{ width: '100%' }}>
-                  <Input
-                    value={formData.firstname}
-                    onChange={(_, data) => handleInputChange('firstname', data.value)}
-                    placeholder="Enter first name"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+        <DialogSurface className={styles.narrowDialogSurface}>
+          <DialogBody>
+            <DialogTitle>Create New Contact</DialogTitle>
+            <DialogContent>
+              <form onSubmit={(e) => { e.preventDefault(); void handleSubmitCreate(); }} className={styles.contactForm}>
+                <Field label="First Name" className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.firstname} onChange={(_, d) => handleInputChange('firstname', d.value)} placeholder="Enter first name" />
                 </Field>
-                <Field label="Last Name" required style={{ width: '100%' }}>
-                  <Input
-                    value={formData.lastname}
-                    onChange={(_, data) => handleInputChange('lastname', data.value)}
-                    placeholder="Enter last name"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+                <Field label="Last Name" required className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.lastname} onChange={(_, d) => handleInputChange('lastname', d.value)} placeholder="Enter last name" required />
                 </Field>
-                <Field label="Email" style={{ width: '100%' }}>
-                  <Input
-                    type="email"
-                    value={formData.emailaddress1}
-                    onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
-                    placeholder="Enter email address"
-                    aria-invalid={!!emailError}
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
-                  {emailError && (
-                    <Text role="alert" size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
-                      {emailError}
-                    </Text>
-                  )}
+                <Field label="Email" className={styles.fullWidthField} validationState={emailError ? 'error' : 'none'} validationMessage={emailError || undefined}>
+                  <Input className={styles.fullWidthInput} type="email" value={formData.emailaddress1} onChange={(_, d) => handleInputChange('emailaddress1', d.value)} placeholder="Enter email address" aria-invalid={!!emailError} />
                 </Field>
-                <Field label="Phone" style={{ width: '100%' }}>
-                  <Input
-                    value={formData.telephone1}
-                    onChange={(_, data) => handleInputChange('telephone1', data.value)}
-                    placeholder="Enter phone number"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+                <Field label="Phone" className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.telephone1} onChange={(_, d) => handleInputChange('telephone1', d.value)} placeholder="Enter phone number" />
                 </Field>
-                <Field label="Job Title" style={{ width: '100%' }}>
-                  <Input
-                    value={formData.jobtitle}
-                    onChange={(_, data) => handleInputChange('jobtitle', data.value)}
-                    placeholder="Enter job title"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+                <Field label="Job Title" className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.jobtitle} onChange={(_, d) => handleInputChange('jobtitle', d.value)} placeholder="Enter job title" />
                 </Field>
-              </div>
-            </DialogBody>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancel</Button>
-              </DialogTrigger>
-              <Button
-                appearance="primary"
-                onClick={handleSubmitCreate}
-                disabled={isSubmitting || !formData.lastname.trim()}
-              >
-                {isSubmitting ? 'Creating...' : 'Create'}
-              </Button>
-            </DialogActions>
-          </DialogContent>
+                <DialogActions>
+                  <DialogTrigger disableButtonEnhancement>
+                    <Button appearance="secondary">Cancel</Button>
+                  </DialogTrigger>
+                  <Button appearance="primary" type="submit" disabled={isSubmitting || !formData.lastname.trim()}>{isSubmitting ? 'Creating...' : 'Create'}</Button>
+                </DialogActions>
+              </form>
+            </DialogContent>
+          </DialogBody>
         </DialogSurface>
       </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={(_, data) => setIsEditDialogOpen(data.open)}>
-        <DialogSurface style={{ maxWidth: '400px' }}>
-          <DialogTitle>Edit Contact</DialogTitle>
-          <DialogContent>
-            <DialogBody>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, width: '100%' }}>
-                <Field label="First Name" style={{ width: '100%' }}>
-                  <Input
-                    value={formData.firstname}
-                    onChange={(_, data) => handleInputChange('firstname', data.value)}
-                    placeholder="Enter first name"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+        <DialogSurface className={styles.narrowDialogSurface}>
+          <DialogBody>
+            <DialogTitle>Edit Contact</DialogTitle>
+            <DialogContent>
+              <form onSubmit={(e) => { e.preventDefault(); void handleSubmitEdit(); }} className={styles.contactForm}>
+                <Field label="First Name" className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.firstname} onChange={(_, d) => handleInputChange('firstname', d.value)} placeholder="Enter first name" />
                 </Field>
-                <Field label="Last Name" required style={{ width: '100%' }}>
-                  <Input
-                    value={formData.lastname}
-                    onChange={(_, data) => handleInputChange('lastname', data.value)}
-                    placeholder="Enter last name"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+                <Field label="Last Name" required className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.lastname} onChange={(_, d) => handleInputChange('lastname', d.value)} placeholder="Enter last name" required />
                 </Field>
-                <Field label="Email" style={{ width: '100%' }}>
-                  <Input
-                    type="email"
-                    value={formData.emailaddress1}
-                    onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
-                    placeholder="Enter email address"
-                    aria-invalid={!!emailError}
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
-                  {emailError && (
-                    <Text role="alert" size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
-                      {emailError}
-                    </Text>
-                  )}
+                <Field label="Email" className={styles.fullWidthField} validationState={emailError ? 'error' : 'none'} validationMessage={emailError || undefined}>
+                  <Input className={styles.fullWidthInput} type="email" value={formData.emailaddress1} onChange={(_, d) => handleInputChange('emailaddress1', d.value)} placeholder="Enter email address" aria-invalid={!!emailError} />
                 </Field>
-                <Field label="Phone" style={{ width: '100%' }}>
-                  <Input
-                    value={formData.telephone1}
-                    onChange={(_, data) => handleInputChange('telephone1', data.value)}
-                    placeholder="Enter phone number"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+                <Field label="Phone" className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.telephone1} onChange={(_, d) => handleInputChange('telephone1', d.value)} placeholder="Enter phone number" />
                 </Field>
-                <Field label="Job Title" style={{ width: '100%' }}>
-                  <Input
-                    value={formData.jobtitle}
-                    onChange={(_, data) => handleInputChange('jobtitle', data.value)}
-                    placeholder="Enter job title"
-                    style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                  />
+                <Field label="Job Title" className={styles.fullWidthField}>
+                  <Input className={styles.fullWidthInput} value={formData.jobtitle} onChange={(_, d) => handleInputChange('jobtitle', d.value)} placeholder="Enter job title" />
                 </Field>
-              </div>
-            </DialogBody>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancel</Button>
-              </DialogTrigger>
-              <Button
-                appearance="primary"
-                onClick={handleSubmitEdit}
-                disabled={isSubmitting || !formData.lastname.trim()}
-              >
-                {isSubmitting ? 'Updating...' : 'Update'}
-              </Button>
-            </DialogActions>
-          </DialogContent>
+                <DialogActions>
+                  <DialogTrigger disableButtonEnhancement>
+                    <Button appearance="secondary">Cancel</Button>
+                  </DialogTrigger>
+                  <Button appearance="primary" type="submit" disabled={isSubmitting || !formData.lastname.trim()}>{isSubmitting ? 'Updating...' : 'Update'}</Button>
+                </DialogActions>
+              </form>
+            </DialogContent>
+          </DialogBody>
         </DialogSurface>
       </Dialog>
 

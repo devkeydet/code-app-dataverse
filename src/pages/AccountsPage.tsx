@@ -97,23 +97,29 @@ const useStyles = makeStyles({
         padding: tokens.spacingVerticalXXL,
         color: tokens.colorNeutralForeground3,
     },
-    dialogForm: {
+    accountForm: {
         display: 'flex',
         flexDirection: 'column',
         gap: tokens.spacingVerticalM,
+        marginTop: tokens.spacingVerticalXS,
         width: '100%',
-        minWidth: '400px',
+        // About 15% narrower than original 420px
+        minWidth: '360px',
+        boxSizing: 'border-box'
     },
-    dialogField: {
+    narrowDialogSurface: {
+        // ~15% narrower than default ~500px
+        maxWidth: '430px',
+        width: '100%'
+    },
+    fullWidthField: {
         width: '100%',
-        '& > *': {
-            width: '100%',
-        },
+        '& > *': { width: '100%' }
     },
-    dialogInput: {
-        width: '100% !important',
-        minWidth: '100%',
-        boxSizing: 'border-box',
+    fullWidthInput: {
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box'
     },
 });
 
@@ -471,145 +477,103 @@ export const AccountsPage: React.FC = () => {
 
             {/* Create Dialog */}
             <Dialog open={isCreateDialogOpen} onOpenChange={(_, data) => setIsCreateDialogOpen(data.open)}>
-                <DialogSurface style={{ maxWidth: '500px', minWidth: '400px' }}>
-                    <DialogTitle>Create New Account</DialogTitle>
-                    <DialogContent>
-                        <DialogBody>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, width: '100%' }}>
-                                <Field label="Account Name" required style={{ width: '100%' }}>
-                                    <Input
+                <DialogSurface className={styles.narrowDialogSurface}>
+                    <DialogBody>
+                        <DialogTitle>Create New Account</DialogTitle>
+                        <DialogContent>
+                            <form onSubmit={(e) => { e.preventDefault(); void handleSubmitCreate(); }} className={styles.accountForm}>
+                                <Field label="Account Name" required className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         value={formData.name}
                                         onChange={(_, data) => handleInputChange('name', data.value)}
-                                        placeholder="Enter account name"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter account name" required />
                                 </Field>
-                                <Field label="Account Number" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Account Number" className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         value={formData.accountnumber}
                                         onChange={(_, data) => handleInputChange('accountnumber', data.value)}
-                                        placeholder="Enter account number"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter account number" />
                                 </Field>
-                                <Field label="Email" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Email" className={styles.fullWidthField} validationState={emailError ? 'error' : 'none'} validationMessage={emailError || undefined}>
+                                    <Input className={styles.fullWidthInput}
                                         type="email"
                                         value={formData.emailaddress1}
                                         onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
                                         placeholder="Enter email address"
-                                        aria-invalid={!!emailError}
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
-                                    {emailError && (
-                                        <Text role="alert" size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
-                                            {emailError}
-                                        </Text>
-                                    )}
+                                        aria-invalid={!!emailError} />
                                 </Field>
-                                <Field label="Phone" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Phone" className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         type="tel"
                                         value={formData.address1_telephone1}
                                         onChange={(_, data) => handleInputChange('address1_telephone1', data.value)}
-                                        placeholder="Enter phone number"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter phone number" />
                                 </Field>
-                                <Field label="Website" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Website" className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         type="url"
                                         value={formData.websiteurl}
                                         onChange={(_, data) => handleInputChange('websiteurl', data.value)}
-                                        placeholder="Enter website URL"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter website URL" />
                                 </Field>
-                            </div>
-                        </DialogBody>
-                        <DialogActions>
-                            <Button onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
-                            <Button
-                                appearance="primary"
-                                onClick={handleSubmitCreate}
-                                disabled={isSubmitting || !formData.name.trim()}
-                            >
-                                {isSubmitting ? 'Creating...' : 'Create'}
-                            </Button>
-                        </DialogActions>
-                    </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setIsCreateDialogOpen(false)} appearance="secondary">Cancel</Button>
+                                    <Button appearance="primary" type="submit" disabled={isSubmitting || !formData.name.trim()}>{isSubmitting ? 'Creating...' : 'Create'}</Button>
+                                </DialogActions>
+                            </form>
+                        </DialogContent>
+                    </DialogBody>
                 </DialogSurface>
             </Dialog>
 
             {/* Edit Dialog */}
             <Dialog open={isEditDialogOpen} onOpenChange={(_, data) => setIsEditDialogOpen(data.open)}>
-                <DialogSurface style={{ maxWidth: '500px', minWidth: '400px' }}>
-                    <DialogTitle>Edit Account</DialogTitle>
-                    <DialogContent>
-                        <DialogBody>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, width: '100%' }}>
-                                <Field label="Account Name" required style={{ width: '100%' }}>
-                                    <Input
+                <DialogSurface className={styles.narrowDialogSurface}>
+                    <DialogBody>
+                        <DialogTitle>Edit Account</DialogTitle>
+                        <DialogContent>
+                            <form onSubmit={(e) => { e.preventDefault(); void handleSubmitEdit(); }} className={styles.accountForm}>
+                                <Field label="Account Name" required className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         value={formData.name}
                                         onChange={(_, data) => handleInputChange('name', data.value)}
-                                        placeholder="Enter account name"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter account name" required />
                                 </Field>
-                                <Field label="Account Number" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Account Number" className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         value={formData.accountnumber}
                                         onChange={(_, data) => handleInputChange('accountnumber', data.value)}
-                                        placeholder="Enter account number"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter account number" />
                                 </Field>
-                                <Field label="Email" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Email" className={styles.fullWidthField} validationState={emailError ? 'error' : 'none'} validationMessage={emailError || undefined}>
+                                    <Input className={styles.fullWidthInput}
                                         type="email"
                                         value={formData.emailaddress1}
                                         onChange={(_, data) => handleInputChange('emailaddress1', data.value)}
                                         placeholder="Enter email address"
-                                        aria-invalid={!!emailError}
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
-                                    {emailError && (
-                                        <Text role="alert" size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
-                                            {emailError}
-                                        </Text>
-                                    )}
+                                        aria-invalid={!!emailError} />
                                 </Field>
-                                <Field label="Phone" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Phone" className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         type="tel"
                                         value={formData.address1_telephone1}
                                         onChange={(_, data) => handleInputChange('address1_telephone1', data.value)}
-                                        placeholder="Enter phone number"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter phone number" />
                                 </Field>
-                                <Field label="Website" style={{ width: '100%' }}>
-                                    <Input
+                                <Field label="Website" className={styles.fullWidthField}>
+                                    <Input className={styles.fullWidthInput}
                                         type="url"
                                         value={formData.websiteurl}
                                         onChange={(_, data) => handleInputChange('websiteurl', data.value)}
-                                        placeholder="Enter website URL"
-                                        style={{ width: '100%', minWidth: '320px', boxSizing: 'border-box' }}
-                                    />
+                                        placeholder="Enter website URL" />
                                 </Field>
-                            </div>
-                        </DialogBody>
-                        <DialogActions>
-                            <Button onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-                            <Button
-                                appearance="primary"
-                                onClick={handleSubmitEdit}
-                                disabled={isSubmitting || !formData.name.trim()}
-                            >
-                                {isSubmitting ? 'Updating...' : 'Update'}
-                            </Button>
-                        </DialogActions>
-                    </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setIsEditDialogOpen(false)} appearance="secondary">Cancel</Button>
+                                    <Button appearance="primary" type="submit" disabled={isSubmitting || !formData.name.trim()}>{isSubmitting ? 'Updating...' : 'Update'}</Button>
+                                </DialogActions>
+                            </form>
+                        </DialogContent>
+                    </DialogBody>
                 </DialogSurface>
             </Dialog>
 
